@@ -1,0 +1,23 @@
+{
+  "name": "ia-no-balcao-landing",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Página de vendas do curso IA no Balcão",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "tailwindcss -i ./src/input.css -o ./assets/styles.css --minify",
+    "build:js": "esbuild src/main.js --bundle --minify --format=iife --target=es2020 --outfile=assets/main.js",
+    "dev:css": "tailwindcss -i ./src/input.css -o ./assets/styles.css --watch",
+    "dev:js": "esbuild src/main.js --bundle --format=iife --target=es2020 --outfile=assets/main.js --watch",
+    "images": "node scripts/optimize-images.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "esbuild": "^0.28.2",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.1.0"
+  },
+  "dependencies": {
+    "motion": "^14.0.0"
+  }
+}
