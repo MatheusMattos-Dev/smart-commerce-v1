@@ -97,6 +97,17 @@ for (const name of ['CS001', 'CS002', 'CS003', 'CS005', 'CS006', 'CS009']) {
   );
 }
 
+// Retratos maiores, em 4:5, para os cards de /o que você vai criar
+for (const name of ['CS002', 'CS003', 'CS005', 'CS009']) {
+  jobs.push(
+    sharp(`img/${name}.webp`)
+      .resize({ width: 640, height: 800, fit: 'cover', position: 'top' })
+      .webp({ quality: 80, effort: 6 })
+      .toFile(`${OUT}/${name.toLowerCase()}-640.webp`)
+      .then((info) => [`${name.toLowerCase()}-640.webp`, info]),
+  );
+}
+
 // Prévia de compartilhamento (WhatsApp, redes): 1200x630 com o logo corrigido
 // à esquerda e as telas do hero à direita, sobre o céu esverdeado da página.
 const ogBg = Buffer.from(

@@ -137,7 +137,9 @@ const fit = (() => {
   let current = -1;
   let pos = null;
   let held = false;
-  let visible = true;
+  // o ciclo só roda com o card na tela (no celular ele fica escondido e nunca entra)
+  let visible = false;
+  let slide = null;
 
   // retângulo do item dentro do .fit-wrap; no 2x2 do celular, um respiro nas bordas
   function rect(i) {
@@ -166,7 +168,7 @@ const fit = (() => {
         fill: 'forwards',
       });
     } else {
-      animate(indicator, { x: [pos.x, to.x], y: [pos.y, to.y], width: [pos.w, to.w], height: [pos.h, to.h] }, follow);
+      slide = animate(indicator, { x: [pos.x, to.x], y: [pos.y, to.y], width: [pos.w, to.w], height: [pos.h, to.h] }, follow);
     }
     pos = to;
     items.forEach((a, j) => a.classList.toggle('is-on', j === i));
@@ -179,8 +181,11 @@ const fit = (() => {
     a.addEventListener('blur', () => { held = false; });
   });
   list.addEventListener('pointerleave', () => { held = false; });
+  // ao mudar o tamanho da tela, um deslize em andamento sobrescreveria a
+  // posição nova com a antiga: ele para antes do marcador ser reposicionado
   window.addEventListener('resize', () => {
     if (current < 0) return;
+    if (slide) slide.stop();
     pos = rect(current);
     place(pos);
   });
@@ -304,7 +309,9 @@ const fit = (() => {
   const stage = document.querySelector('[data-hero-stage]');
   if (!hero || reduceMotion) return;
   const range = { target: hero, offset: ['start start', 'end start'] };
-  if (stage) scroll(animate(stage, { y: [0, 90], scale: [1, 0.88] }, { ease: 'linear' }), range);
+  // no celular o logo fica logo abaixo do trio: o deslocamento é menor para não encostar
+  const small = innerWidth < 768;
+  if (stage) scroll(animate(stage, { y: [0, small ? 40 : 90], scale: [1, small ? 0.94 : 0.88] }, { ease: 'linear' }), range);
   // no celular o hero é alto e o efeito deixava a faixa "Feito para quem
   // tem" parecendo apagada logo na primeira rolagem
   if (inner && matchMedia('(min-width: 768px)').matches) {
@@ -317,7 +324,8 @@ const fit = (() => {
    devagar que a página, como se estivessem longe. */
 if (!reduceMotion) {
   document.querySelectorAll('.sky').forEach((sky) => {
-    const depth = sky.id === 'topo' ? 90 : 60;
+    // no celular a faixa de nuvens é baixa: o deslocamento também é menor
+    const depth = (sky.id === 'topo' ? 90 : 60) * (innerWidth < 768 ? 0.4 : 1);
     scroll((p) => sky.style.setProperty('--sky-y', `${(p * depth).toFixed(1)}px`), {
       target: sky,
       offset: ['end end', 'end start'],
@@ -478,17 +486,42 @@ if (!reduceMotion) {
   });
 }
 
-/* ---------- Números contando ---------- */
+/* ---------- Números contando ----------
+   data-decimals="1" conta com uma casa decimal, no formato brasileiro (1,2). */
 if (!reduceMotion) {
-  document.querySelectorAll('[data-count]').forEach((el) => { el.textContent = '0'; });
+  const fmt = (el, v) => {
+    const dec = Number(el.dataset.decimals || 0);
+    return v.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  };
+  document.querySelectorAll('[data-count]').forEach((el) => { el.textContent = fmt(el, 0); });
   inView('[data-count]', (el) => {
     animate(0, Number(el.dataset.count), {
       duration: 1.6,
       ease: EASE_OUT,
-      onUpdate: (v) => { el.textContent = Math.round(v); },
+      onUpdate: (v) => { el.textContent = fmt(el, el.dataset.decimals ? v : Math.round(v)); },
     });
   }, { amount: 0.6 });
 }
+
+/* ---------- /na prática: contador do visor da câmera ----------
+   Corre como timecode de gravação (h:m:s:quadro, 24 quadros por segundo)
+   enquanto a seção está na tela. */
+(() => {
+  const el = document.querySelector('[data-timecode]');
+  if (!el || reduceMotion) return;
+  const pad = (n) => String(n).padStart(2, '0');
+  let frames = 0;
+  let timer = 0;
+  const tick = () => {
+    frames++;
+    const s = Math.floor(frames / 24);
+    el.textContent = `00:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}:${pad(frames % 24)}`;
+  };
+  inView(el.closest('section'), () => {
+    timer = setInterval(tick, 1000 / 24);
+    return () => clearInterval(timer);
+  }, { amount: 0.2 });
+})();
 
 /* ---------- /na prática: abas e o "vídeo" do personagem ---------- */
 (() => {
@@ -524,17 +557,23 @@ if (!reduceMotion) {
     pos = to;
   }
 
-  // a cópia da fala que é digitada por cima do texto completo
+  // em cada painel: a cópia da fala que é digitada por cima do texto
+  // completo e as cantoneiras do foco automático
   panels.forEach((panel) => {
     const typed = document.createElement('span');
     typed.className = 'speech-typed';
     typed.setAttribute('aria-hidden', 'true');
     panel.querySelector('[data-speech]').append(typed);
+
+    const focus = document.createElement('span');
+    focus.className = 'reel-focus';
+    focus.setAttribute('aria-hidden', 'true');
+    panel.querySelector('.reel-wrap').append(focus);
   });
 
   // Conta a história do painel: a ficha se preenche campo a campo, a fala é
-  // digitada, o botão "Gerar vídeo" afunda sozinho, a seta se desenha e o
-  // vídeo é "gerado". Depois o vídeo toca (barra de progresso, zoom lento,
+  // digitada, o botão "Gerar vídeo" afunda sozinho e o vídeo é "gerado"
+  // (com o foco da câmera travando no personagem). Depois o vídeo toca (barra de progresso, zoom lento,
   // legendas uma a uma e o adesivo do produto) e repete enquanto a aba
   // estiver aberta e a seção estiver na tela. Pelo botão, pula a escrita.
   const REEL_SECONDS = 9;
@@ -548,8 +587,8 @@ if (!reduceMotion) {
     const typed = speech.querySelector('.speech-typed');
     const line = speech.querySelector('.speech-full').textContent;
     const gen = panel.querySelector('[data-generate]');
-    const [arrow, tip] = panel.querySelectorAll('.flow-arrow path');
     const render = panel.querySelector('.reel-render');
+    const focus = panel.querySelector('.reel-focus');
     const reel = panel.querySelector('[data-reel]');
     const bar = reel.querySelector('.reel-bar i');
     const img = reel.querySelector('img');
@@ -563,10 +602,8 @@ if (!reduceMotion) {
     caps.forEach((c) => { c.style.opacity = '0'; });
     sticker.style.opacity = '0';
     bar.style.transform = 'scaleX(0)';
-    arrow.getAnimations().forEach((a) => a.cancel());
-    arrow.style.strokeDashoffset = '1';
-    tip.style.opacity = '0';
     render.style.opacity = '0';
+    focus.style.opacity = '0';
     speech.classList.remove('is-typing');
 
     if (!fromButton) {
@@ -592,15 +629,12 @@ if (!reduceMotion) {
       if (!live()) return;
     }
 
-    // a seta vai pela Web Animations nativa: no Motion 14, animar
-    // strokeDashoffset num path de SVG trava a página
-    arrow.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], {
-      duration: 600,
-      easing: `cubic-bezier(${EASE_OUT.join(',')})`,
-      fill: 'forwards',
-    });
-    animate(tip, { opacity: [0, 1] }, { duration: 0.2, delay: 0.5 });
     animate(render, { opacity: [0, 1] }, { duration: 0.2 });
+    // a câmera trava o foco no personagem: as cantoneiras fecham, piscam e somem
+    reelAnims.push(animate(focus, {
+      opacity: [0, 1, 1, 0.3, 1, 1, 0],
+      scale: [1.3, 1, 1, 1, 1, 1, 1],
+    }, { duration: 1.6, times: [0, 0.22, 0.45, 0.53, 0.62, 0.86, 1], ease: 'easeOut' }));
     await wait(1300);
     if (!live()) return;
     animate(render, { opacity: 0 }, { duration: 0.35 });
@@ -672,6 +706,26 @@ if (!reduceMotion) {
       token++;
     };
   }, { amount: 0.25 });
+})();
+
+/* ---------- Garantia: o selo carimba ----------
+   Quando o card aparece, o selo cai girando, bate com uma mola curta e o
+   card dá um tranco com o impacto. O CSS já inclina o selo -8deg; aqui só
+   entra o giro extra. Depois a estrela gira devagar (CSS). */
+(() => {
+  const card = document.querySelector('[data-guarantee]');
+  const seal = card && card.querySelector('[data-seal]');
+  if (!seal || reduceMotion) return;
+  seal.style.opacity = '0';
+  inView(card, () => {
+    const hit = { type: 'spring', visualDuration: 0.45, bounce: 0.35, delay: 0.35 };
+    animate(seal, { opacity: [0, 1], scale: [1.8, 1], rotate: [-32, 0] }, {
+      opacity: { duration: 0.15, delay: 0.35 },
+      scale: hit,
+      rotate: hit,
+    });
+    animate(card, { x: [0, -5, 4, -2, 0] }, { duration: 0.4, delay: 0.6, ease: 'easeOut' });
+  }, { amount: 0.5 });
 })();
 
 /* ---------- Acordeões (módulos e FAQ) ----------

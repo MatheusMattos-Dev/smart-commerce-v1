@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Asap:wdth,wght@75..100,400..900&family=Geist+Mono:wght@400;500&display=swap">
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..800&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,700..900,100,1;1,9..144,700..900,100,1&family=Geist+Mono:wght@400;500&display=swap">
   <link rel="preload" as="image" href="assets/img/hero-cards-1024.webp"
     imagesrcset="assets/img/hero-cards-512.webp 512w, assets/img/hero-cards-1024.webp 1024w"
     imagesizes="(min-width: 768px) 28rem, (min-width: 640px) 22rem, 17rem">
@@ -68,7 +68,7 @@
     <section id="topo" class="sky sky-1 sky-fade relative overflow-hidden">
       <div class="hero-haze" aria-hidden="true"></div>
 
-      <div class="wrap relative pt-10 pb-14 sm:pt-14 md:pt-16 md:pb-20" data-hero-inner>
+      <div class="wrap relative pt-10 pb-28 sm:pt-14 md:pt-16 md:pb-20" data-hero-inner>
         <div class="grid items-center gap-6 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-10">
           <div class="order-2 text-center md:order-1 md:text-left">
             <!-- a marca no topo da página (não há mais header) -->
@@ -94,9 +94,11 @@
               apresentam seus produtos, seus serviços ou o que você quiser divulgar. Sem câmera e sem precisar aparecer.
             </p>
 
-            <div data-hero-step class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
-              <a href="#oferta" data-checkout class="btn btn-primary">Quero começar agora</a>
-              <a href="#criar" class="btn btn-ghost">Ver o que está incluso</a>
+            <div data-hero-step
+              class="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6 md:justify-start">
+              <a href="#oferta" data-checkout class="btn btn-primary btn-xl btn-shine w-full shrink-0 sm:w-auto">Quero começar agora
+                <span aria-hidden="true">→</span></a>
+              <a href="#criar" class="link-arrow">Ver o que está incluso <span aria-hidden="true">↓</span></a>
             </div>
           </div>
 
@@ -135,7 +137,8 @@
           </div>
         </div>
 
-        <div data-hero-step class="mx-auto mt-12 max-w-3xl card md:mt-16">
+        <!-- no celular o card fica de fora: o hero já é alto e ele cobria as nuvens -->
+        <div data-hero-step class="mx-auto mt-12 hidden max-w-3xl card md:mt-16 md:block">
           <div class="flex flex-col items-stretch md:flex-row md:items-center">
             <p
               class="mono border-b border-line-2 px-5 py-4 text-left text-[0.8125rem] text-muted md:border-b-0 md:border-r md:border-line-2 md:py-5 md:whitespace-nowrap">
@@ -269,7 +272,8 @@
       </div>
     </section>
 
-    <!-- 5. /o que você vai criar -->
+    <!-- 5. /o que você vai criar: o que sai da aula, cada entrega com um exemplo visual.
+         Muita gente chega aqui direto (link "Ver o que está incluso" do topo), por isso o botão no fim -->
     <section id="criar" class="on-dark section bg-grid bg-grid-dark">
       <div class="wrap">
         <div class="reveal text-center">
@@ -283,60 +287,95 @@
             nos seus anúncios.</p>
         </div>
 
-        <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <article class="make-card is-cream reveal" style="--d:0" data-tilt>
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="8" r="5" />
-                <path d="M20 21a8 8 0 0 0-16 0" />
-              </svg></div>
-            <p class="make-kicker">feito na videoaula</p>
-            <h3 class="make-title">Seu personagem exclusivo</h3>
-            <p class="make-text">Um rosto só seu, com estilo, roupa e jeito de falar que combinam com a sua marca.
-              Sempre igual, em todas as cenas.</p>
+        <div class="bento mt-14">
+          <!-- o personagem: retrato grande com os selos de consistência -->
+          <article class="bento-card is-cream bento-hero reveal" style="--d:0" data-tilt>
+            <div class="bento-portrait">
+              <img src="assets/img/cs009-640.webp" width="640" height="800" loading="lazy" decoding="async"
+                alt="Personagem criada com IA: mulher de óculos redondos, cabelo cacheado preso e colete de tricô">
+              <span class="bento-chip is-a"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>mesmo rosto</span>
+              <span class="bento-chip is-b"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>mesmo estilo</span>
+              <span class="bento-chip is-c"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>em toda cena</span>
+            </div>
+            <div class="bento-copy">
+              <p class="make-kicker">feito na videoaula</p>
+              <h3 class="make-title">Seu personagem exclusivo</h3>
+              <p class="make-text">Um rosto só seu, com estilo, roupa e jeito de falar que combinam com a sua marca.
+                Sempre igual, em todas as cenas.</p>
+            </div>
           </article>
 
-          <article class="make-card is-mustard reveal" style="--d:1" data-tilt>
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
-                <rect x="2" y="6" width="14" height="12" rx="2" />
-              </svg></div>
-            <p class="make-kicker">feito na videoaula</p>
-            <h3 class="make-title">Vídeos falando dos seus produtos</h3>
-            <p class="make-text">Vídeos verticais em que o personagem apresenta, mostra e recomenda o que você vende,
-              com voz e boca sincronizadas.</p>
+          <!-- o vídeo: retrato vertical com play, legenda e a voz em barrinhas -->
+          <article class="bento-card is-mustard bento-video reveal" style="--d:1" data-tilt>
+            <div class="bento-copy">
+              <p class="make-kicker">feito na videoaula</p>
+              <h3 class="make-title">Vídeos falando dos seus produtos</h3>
+              <p class="make-text">Vídeos verticais em que o personagem apresenta, mostra e recomenda o que você vende,
+                com voz e boca sincronizadas.</p>
+            </div>
+            <div class="bento-reel" aria-hidden="true">
+              <img src="assets/img/cs003-reel.webp" width="360" height="640" alt="" loading="lazy" decoding="async">
+              <span class="bento-play"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5Z" /></svg></span>
+              <span class="bento-wave"><i></i><i></i><i></i><i></i><i></i></span>
+              <span class="bento-cap"><span>Domingo é dia de lasanha da nonna.</span></span>
+            </div>
           </article>
 
-          <article class="make-card is-peach reveal" style="--d:2" data-tilt>
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                <rect width="18" height="18" x="3" y="3" rx="2" />
-                <circle cx="9" cy="9" r="2" />
-                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-              </svg></div>
-            <p class="make-kicker">com o pacote de cenários</p>
-            <h3 class="make-title">Fotos com o produto na mão</h3>
-            <p class="make-text">Posts e stories em que o personagem usa, segura ou prova o seu produto real, no cenário
-              que você escolher.</p>
+          <!-- a foto: post com o produto e a etiqueta de preço -->
+          <article class="bento-card is-peach bento-photo reveal" style="--d:2" data-tilt>
+            <div class="bento-post" aria-hidden="true">
+              <img src="assets/img/cs005-640.webp" width="640" height="800" alt="" loading="lazy" decoding="async">
+              <span class="bento-price">Vestido de linho<b>R$ 189</b></span>
+            </div>
+            <div class="bento-copy">
+              <p class="make-kicker">com o pacote de cenários</p>
+              <h3 class="make-title">Fotos com o produto na mão</h3>
+              <p class="make-text">Posts e stories em que o personagem usa, segura ou prova o seu produto real, no cenário
+                que você escolher.</p>
+            </div>
           </article>
 
-          <article class="make-card is-sky reveal" style="--d:3" data-tilt>
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                <path d="M13 8H7" />
-                <path d="M17 12H7" />
-              </svg></div>
-            <p class="make-kicker">com os 60+ roteiros</p>
-            <h3 class="make-title">Roteiros que fazem vender</h3>
-            <p class="make-text">Ganchos, falas e chamadas para ação prontos para Reels, TikTok e anúncios, adaptados ao
-              seu tipo de negócio.</p>
+          <!-- o roteiro: gancho, fala e chamada, com o marcador passando de linha em linha -->
+          <article class="bento-card is-sky bento-script reveal" style="--d:3" data-tilt>
+            <div class="bento-lines" aria-hidden="true">
+              <p><span>gancho</span>Para tudo! Chegou o que você pediu.</p>
+              <p><span>fala</span>Fresquinho, não amassa e vai do P ao GG.</p>
+              <p><span>chamada</span>Chama no WhatsApp antes que acabe!</p>
+            </div>
+            <div class="bento-copy">
+              <p class="make-kicker">com os 60+ roteiros</p>
+              <h3 class="make-title">Roteiros que fazem vender</h3>
+              <p class="make-text">Ganchos, falas e chamadas para ação prontos para Reels, TikTok e anúncios, adaptados ao
+                seu tipo de negócio.</p>
+            </div>
           </article>
+        </div>
+
+        <div class="reveal mt-12 flex flex-col items-center gap-4 text-center">
+          <a href="#oferta" data-checkout class="btn btn-primary btn-xl btn-shine">Quero começar agora <span
+              aria-hidden="true">→</span></a>
+          <p class="bento-note">R$ 19,80 · acesso imediato · 7 dias de garantia</p>
         </div>
       </div>
     </section>
 
     <!-- 6. /na prática: a ficha que o aluno preenche e o vídeo que sai dela -->
-    <section id="pratica" class="on-dark on-petrol section overflow-hidden bg-petrol">
+    <section id="pratica" class="on-dark on-petrol section studio overflow-hidden bg-petrol">
+      <!-- estúdio: visor da câmera (cantos, REC, contador e dados de exposição); o holofote vem do CSS -->
+      <div class="studio-frame" aria-hidden="true">
+        <span class="studio-rec"><i></i>REC</span>
+        <span class="studio-time" data-timecode>00:00:00:00</span>
+        <span class="studio-hud is-left">ISO 400 · ƒ/2.8 · 1/50</span>
+        <span class="studio-hud is-right"><svg class="ico" viewBox="0 0 24 24">
+            <rect width="16" height="10" x="2" y="7" rx="2" />
+            <path d="M22 11v2" />
+            <path d="M6 11v2" />
+            <path d="M10 11v2" />
+            <path d="M14 11v2" />
+          </svg>4K · 24p</span>
+      </div>
       <div class="wrap">
-        <div class="reveal grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div class="reveal grid gap-8">
           <div>
             <p class="label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
@@ -349,7 +388,7 @@
           </div>
 
           <div role="tablist" aria-label="Exemplos por tipo de negócio"
-            class="tabbar relative grid grid-cols-2 gap-1 rounded-[1.75rem] p-1 sm:inline-grid sm:grid-cols-4 sm:rounded-full"
+            class="tabbar relative grid grid-cols-2 gap-1 rounded-[1.75rem] p-1 sm:grid-cols-4 sm:justify-self-start sm:rounded-full"
             data-tabs>
             <span class="tab-indicator" data-tab-indicator aria-hidden="true"></span>
             <button role="tab" id="tab-loja" aria-controls="painel-loja" aria-selected="true"
@@ -401,13 +440,6 @@
                   </svg>Gerar vídeo</button>
                 <span class="slip-hint">toque para ver de novo</span>
               </div>
-            </div>
-
-            <div class="flow" aria-hidden="true">
-              <svg class="flow-arrow" viewBox="0 0 100 44">
-                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
-                <path d="M80 12.5 92.5 22 77 26.5" />
-              </svg>
             </div>
 
             <div class="stage">
@@ -472,13 +504,6 @@
               </div>
             </div>
 
-            <div class="flow" aria-hidden="true">
-              <svg class="flow-arrow" viewBox="0 0 100 44">
-                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
-                <path d="M80 12.5 92.5 22 77 26.5" />
-              </svg>
-            </div>
-
             <div class="stage">
               <svg class="stage-burst" viewBox="0 0 100 100" aria-hidden="true">
                 <polygon points="50.0,2.0 58.0,9.8 68.4,5.7 72.8,15.9 83.9,16.1 84.1,27.2 94.3,31.6 90.2,42.0 98.0,50.0 90.2,58.0 94.3,68.4 84.1,72.8 83.9,83.9 72.8,84.1 68.4,94.3 58.0,90.2 50.0,98.0 42.0,90.2 31.6,94.3 27.2,84.1 16.1,83.9 15.9,72.8 5.7,68.4 9.8,58.0 2.0,50.0 9.8,42.0 5.7,31.6 15.9,27.2 16.1,16.1 27.2,15.9 31.6,5.7 42.0,9.8" />
@@ -539,13 +564,6 @@
                   </svg>Gerar vídeo</button>
                 <span class="slip-hint">toque para ver de novo</span>
               </div>
-            </div>
-
-            <div class="flow" aria-hidden="true">
-              <svg class="flow-arrow" viewBox="0 0 100 44">
-                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
-                <path d="M80 12.5 92.5 22 77 26.5" />
-              </svg>
             </div>
 
             <div class="stage">
@@ -610,13 +628,6 @@
               </div>
             </div>
 
-            <div class="flow" aria-hidden="true">
-              <svg class="flow-arrow" viewBox="0 0 100 44">
-                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
-                <path d="M80 12.5 92.5 22 77 26.5" />
-              </svg>
-            </div>
-
             <div class="stage">
               <svg class="stage-burst" viewBox="0 0 100 100" aria-hidden="true">
                 <polygon points="50.0,2.0 58.0,9.8 68.4,5.7 72.8,15.9 83.9,16.1 84.1,27.2 94.3,31.6 90.2,42.0 98.0,50.0 90.2,58.0 94.3,68.4 84.1,72.8 83.9,83.9 72.8,84.1 68.4,94.3 58.0,90.2 50.0,98.0 42.0,90.2 31.6,94.3 27.2,84.1 16.1,83.9 15.9,72.8 5.7,68.4 9.8,58.0 2.0,50.0 9.8,42.0 5.7,31.6 15.9,27.2 16.1,16.1 27.2,15.9 31.6,5.7 42.0,9.8" />
@@ -643,8 +654,8 @@
       </div>
     </section>
 
-    <!-- 7. Números -->
-    <!-- Substitua pelos números reais do seu produto. -->
+    <!-- 7. Números: o alcance dos 3 vídeos de exemplo (views informadas pela dona da página;
+         curtidas, compartilhamentos e salvamentos somados dos três celulares abaixo) -->
     <section id="numeros" class="proof-bg section section-cut overflow-hidden" aria-label="Em números">
       <div class="wrap">
         <div class="reveal text-center">
@@ -654,9 +665,9 @@
               <path d="M13 17V5" />
               <path d="M8 17v-3" />
             </svg>Em números</p>
-          <h2 class="h2 mx-auto mt-5 max-w-3xl">Tudo o que você leva. <span class="text-petrol">Em números.</span></h2>
-          <p class="lead mx-auto mt-5">O formato que você vai aprender a fazer: vídeos verticais com um personagem
-            hiper-realista falando do seu produto, do seu serviço ou da sua loja.</p>
+          <h2 class="h2 mx-auto mt-5 max-w-3xl">63 milhões de views. <span class="text-petrol">Em só 3 vídeos.</span></h2>
+          <p class="lead mx-auto mt-5">É o alcance de três vídeos com personagem criado com IA. O mesmo formato que você
+            vai aprender a fazer, falando do seu produto, do seu serviço ou da sua loja.</p>
         </div>
 
         <div class="phones reveal mt-14" style="--d:1">
@@ -783,26 +794,47 @@
 
         <dl class="stat-row mt-10">
           <div class="stat-card reveal" style="--d:0" data-tilt>
-            <dt class="stat-label">roteiros de anúncio prontos</dt>
-            <dd class="stat-num"><span data-count="60">60</span>+</dd>
+            <dt class="stat-label">visualizações somadas</dt>
+            <dd class="stat-num"><span data-count="63">63</span> mi+</dd>
           </div>
           <div class="stat-card reveal" style="--d:1" data-tilt>
-            <dt class="stat-label">bônus inclusos no acesso</dt>
-            <dd class="stat-num"><span data-count="3">3</span></dd>
+            <dt class="stat-label">curtidas</dt>
+            <dd class="stat-num"><span data-count="1.2" data-decimals="1">1,2</span> mi</dd>
           </div>
           <div class="stat-card reveal" style="--d:2" data-tilt>
-            <dt class="stat-label">de resolução nos vídeos</dt>
-            <dd class="stat-num">até <span data-count="4">4</span>K</dd>
+            <dt class="stat-label">compartilhamentos</dt>
+            <dd class="stat-num"><span data-count="396">396</span> mil</dd>
           </div>
           <div class="stat-card reveal" style="--d:3" data-tilt>
-            <dt class="stat-label">de garantia incondicional</dt>
-            <dd class="stat-num"><span data-count="7">7</span> dias</dd>
+            <dt class="stat-label">salvamentos</dt>
+            <dd class="stat-num"><span data-count="66">66</span> mil</dd>
           </div>
         </dl>
 
-        <p class="reveal mt-8 text-center text-[1.0625rem] font-bold italic">E tudo isso num acesso só.</p>
-        <p class="mx-auto mt-3 max-w-xl text-center text-[0.75rem] text-faint">Vídeos de exemplo do formato, com crédito
-          a quem fez. Números de 08/10/2026. Não são resultados de alunos.</p>
+        <!-- o que esse alcance pode significar para quem vende -->
+        <div class="gain reveal mt-12">
+          <p class="gain-title">O que esse formato pode gerar para o seu negócio</p>
+          <ul class="gain-list">
+            <li><span class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg></span><span><strong>Mais gente vendo</strong> os seus produtos, sem depender só de anúncio
+                pago.</span></li>
+            <li><span class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+                  <path d="m21.854 2.147-10.94 10.939" />
+                </svg></span><span><strong>Compartilhamentos</strong> que levam a sua loja a quem ainda não te
+                conhece.</span></li>
+            <li><span class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                </svg></span><span><strong>Comentários e salvamentos</strong> que viram conversa no direct e no
+                WhatsApp.</span></li>
+          </ul>
+        </div>
+        <p class="mx-auto mt-6 max-w-xl text-center text-[0.75rem] text-faint">Vídeos de exemplo do formato, com crédito
+          a quem fez. Visualizações e interações somadas dos 3 vídeos; curtidas, compartilhamentos e salvamentos de
+          08/10/2026. Não são resultados de alunos: o alcance varia conforme o negócio e a execução.</p>
       </div>
     </section>
 
@@ -1127,7 +1159,8 @@
                   </svg></span>Garantia incondicional de 7 dias</li>
             </ul>
 
-            <a href="#oferta" data-checkout class="btn btn-primary btn-lg mt-8">Garantir meu acesso por R$ 19,80</a>
+            <a href="#oferta" data-checkout class="btn btn-primary btn-lg btn-shine mt-8">Garantir meu acesso por R$ 19,80 <span
+                aria-hidden="true">→</span></a>
           </div>
 
           <div class="ticket-stub" aria-hidden="true">
@@ -1163,8 +1196,8 @@
     <!-- 12. /garantia -->
     <section id="garantia" class="section bg-paper">
       <div class="wrap">
-        <div class="guarantee reveal mx-auto max-w-[54rem]">
-          <svg class="guarantee-seal" viewBox="0 0 100 100" role="img" aria-label="Selo: 7 dias de garantia">
+        <div class="guarantee reveal mx-auto max-w-[54rem]" data-guarantee>
+          <svg class="guarantee-seal" viewBox="0 0 100 100" role="img" aria-label="Selo: 7 dias de garantia" data-seal>
             <polygon
               points="50.0,1.0 58.2,13.9 71.3,5.9 73.1,21.1 88.3,19.4 83.3,33.9 97.8,39.1 87.0,50.0 97.8,60.9 83.3,66.1 88.3,80.6 73.1,78.9 71.3,94.1 58.2,86.1 50.0,99.0 41.8,86.1 28.7,94.1 26.9,78.9 11.7,80.6 16.7,66.1 2.2,60.9 13.0,50.0 2.2,39.1 16.7,33.9 11.7,19.4 26.9,21.1 28.7,5.9 41.8,13.9" />
             <text class="seal-num" x="50" y="58" text-anchor="middle">7</text>
@@ -1175,8 +1208,14 @@
             <h2 class="guarantee-title">Teste por 7 dias.</h2>
             <p class="guarantee-sub">Se não for para você, devolvemos tudo.</p>
             <p class="guarantee-text">Entre, assista à videoaula e crie o seu primeiro personagem. Se em até 7 dias você
-              achar que o material não serve para o seu negócio, mande um e-mail e devolvemos 100% do valor. Sem perguntas e sem
-              burocracia.</p>
+              achar que o material não serve para o seu negócio, <a class="font-semibold text-fg underline underline-offset-4 hover:text-accent"
+                href="https://wa.me/5555991693698?text=Ol%C3%A1%21%20Vim%20pela%20p%C3%A1gina%20do%20IA%20no%20Balc%C3%A3o%20e%20tenho%20uma%20d%C3%BAvida." target="_blank" rel="noopener">chame a gente no WhatsApp</a> e devolvemos 100% do valor. Sem
+              perguntas e sem burocracia.</p>
+            <div class="guarantee-cta">
+              <a href="#oferta" data-checkout class="btn btn-primary">Quero testar por 7 dias <span
+                  aria-hidden="true">→</span></a>
+              <span class="guarantee-note">Pagamento único de R$ 19,80</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1184,19 +1223,66 @@
 
     <!-- 13. /perguntas frequentes -->
     <section id="faq" class="section bg-cream">
-      <div class="wrap grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-16">
-        <div class="reveal">
+      <div class="wrap grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-16">
+        <div class="faq-aside reveal">
           <p class="label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
               <path d="M12 17h.01" />
             </svg>Perguntas frequentes</p>
           <h2 class="h2 mt-5">Ficou alguma dúvida?</h2>
-          <p class="lead mt-4">Se a sua não estiver aqui, mande uma mensagem pelo e-mail de suporte que respondemos em
-            até um dia útil.</p>
+          <p class="lead mt-4">Separamos as perguntas mais comuns. Se a sua não estiver aqui, é só chamar.</p>
+
+          <!-- atendimento: um dos personagens "atende" no WhatsApp -->
+          <div class="help-card mt-8">
+            <span class="help-avatar"><img src="assets/img/cs002-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async"><i class="help-dot" aria-hidden="true"></i></span>
+            <div>
+              <p class="help-title">Fale com a gente</p>
+              <p class="help-text">Respondemos no WhatsApp em até um dia útil.</p>
+              <a class="btn btn-primary btn-sm mt-3" href="https://wa.me/5555991693698?text=Ol%C3%A1%21%20Vim%20pela%20p%C3%A1gina%20do%20IA%20no%20Balc%C3%A3o%20e%20tenho%20uma%20d%C3%BAvida." target="_blank" rel="noopener"><svg class="ico size-4"
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                </svg>Chamar no WhatsApp</a>
+            </div>
+          </div>
         </div>
 
         <div class="card reveal divide-y divide-line-2">
+          <details class="acc" name="faq">
+            <summary><span class="acc-title font-semibold">O que eu recebo exatamente?</span><svg
+                class="ico acc-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg></summary>
+            <div class="acc-body">
+              <p class="px-5 pb-6 text-muted sm:px-7">Uma videoaula prática em que você monta o seu personagem do zero, um material em PDF com todo o passo a
+                passo explicado e três bônus: a biblioteca de prompts de personagens, mais de 60 roteiros de anúncio e o
+                pacote de cenários prontos.</p>
+            </div>
+          </details>
+          <details class="acc" name="faq">
+            <summary><span class="acc-title font-semibold">É pagamento único ou tem mensalidade?</span><svg
+                class="ico acc-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg></summary>
+            <div class="acc-body">
+              <p class="px-5 pb-6 text-muted sm:px-7">Pagamento único de R$ 19,80, à vista ou em até 5x de R$ 3,96. Não tem mensalidade nem cobrança
+                automática.</p>
+            </div>
+          </details>
+          <details class="acc" name="faq">
+            <summary><span class="acc-title font-semibold">Serve para o meu tipo de negócio?</span><svg
+                class="ico acc-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg></summary>
+            <div class="acc-body">
+              <p class="px-5 pb-6 text-muted sm:px-7">Serve para quem vende produto ou serviço: loja, clínica, restaurante, salão de beleza, oficina e
+                prestadores de serviço. Os mais de 60 roteiros de anúncio já vêm separados por tipo de negócio.</p>
+            </div>
+          </details>
           <details class="acc" name="faq">
             <summary><span class="acc-title font-semibold">Preciso saber programar ou editar vídeo?</span><svg
                 class="ico acc-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -1272,7 +1358,7 @@
                 <path d="M12 5v14" />
               </svg></summary>
             <div class="acc-body">
-              <p class="px-5 pb-6 text-muted sm:px-7">Você tem 7 dias de garantia. Peça o reembolso por e-mail dentro
+              <p class="px-5 pb-6 text-muted sm:px-7">Você tem 7 dias de garantia. Peça o reembolso pelo WhatsApp dentro
                 desse prazo e devolvemos 100% do valor pago.</p>
             </div>
           </details>
@@ -1298,12 +1384,12 @@
         </div>
 
         <h2 class="h2 reveal mx-auto mt-10 max-w-3xl md:text-[4.25rem]" style="--d:1">Comece hoje. <span
-            class="sticker-text is-rust block">Quem vai ser o seu personagem?</span></h2>
+            class="sticker-text block">Quem vai ser o seu personagem?</span></h2>
         <p class="lead reveal mx-auto mt-6" style="--d:2">Ele pode estar divulgando a sua loja ainda esta semana: no
           Instagram, no WhatsApp e nos seus anúncios, sem você precisar aparecer.</p>
         <div class="reveal mt-9" style="--d:3">
           <a href="#oferta" data-checkout
-            class="btn btn-primary w-full sm:w-auto sm:min-w-[16rem] min-h-[3.5rem] text-[1.0625rem]">Criar meu
+            class="btn btn-primary btn-xl btn-shine w-full sm:w-auto sm:min-w-[16rem]">Criar meu
             personagem <span aria-hidden="true">→</span></a>
           <ul class="cta-chips mt-5">
             <li>Acesso imediato</li>
@@ -1324,7 +1410,33 @@
             src="assets/img/logo-480.webp" width="480" height="164" alt="" loading="lazy" decoding="async"></a>
         <p class="mt-4 max-w-xs text-muted">Personagens de IA que divulgam o seu negócio, sem você precisar aparecer.
         </p>
-        <a href="#oferta" data-checkout class="btn btn-primary btn-sm mt-6">Garantir meu acesso</a>
+        <a href="#oferta" data-checkout class="btn btn-primary btn-sm mt-6">Garantir meu acesso <span aria-hidden="true">→</span></a>
+        <ul class="pay-row mt-6" aria-label="Formas de pagamento">
+          <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>Compra segura pela Wiapy</li>
+          <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="5" height="5" x="3" y="3" rx="1" />
+              <rect width="5" height="5" x="16" y="3" rx="1" />
+              <rect width="5" height="5" x="3" y="16" rx="1" />
+              <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+              <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+              <path d="M16 12h1" />
+              <path d="M12 21v-1" />
+            </svg>Pix</li>
+          <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <rect width="20" height="14" x="2" y="5" rx="2" />
+              <path d="M2 10h20" />
+            </svg>Cartão em até 5x</li>
+          <li><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 5v14" />
+              <path d="M8 5v14" />
+              <path d="M12 5v14" />
+              <path d="M17 5v14" />
+              <path d="M21 5v14" />
+            </svg>Boleto</li>
+        </ul>
       </div>
 
       <nav aria-label="Seções da página">
@@ -1332,7 +1444,7 @@
             <circle cx="12" cy="12" r="10" />
             <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" />
           </svg>Navegação</p>
-        <ul class="mt-5 space-y-3">
+        <ul class="mt-5 grid grid-cols-2 gap-x-6 md:block md:space-y-3">
           <li><a class="footer-link text-fg hover:text-mustard" href="#criar">O que você vai criar</a></li>
           <li><a class="footer-link text-fg hover:text-mustard" href="#pratica">Na prática</a></li>
           <li><a class="footer-link text-fg hover:text-mustard" href="#conteudo">O que tem dentro</a></li>
@@ -1347,10 +1459,11 @@
               d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z" />
             <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
           </svg>Suporte</p>
-        <!-- Troque os # pelos seus canais reais (mailto:, link do WhatsApp e perfil do Instagram) -->
+        <!-- Troque os # que faltam pelos canais reais (mailto: do e-mail e perfil do Instagram) -->
         <ul class="mt-5 space-y-3">
           <li><a class="footer-link text-fg hover:text-mustard" href="#">E-mail de suporte</a></li>
-          <li><a class="footer-link text-fg hover:text-mustard" href="#">WhatsApp</a></li>
+          <li><a class="footer-link text-fg hover:text-mustard" href="https://wa.me/5555991693698?text=Ol%C3%A1%21%20Vim%20pela%20p%C3%A1gina%20do%20IA%20no%20Balc%C3%A3o%20e%20tenho%20uma%20d%C3%BAvida." target="_blank"
+              rel="noopener">WhatsApp</a></li>
           <li><a class="footer-link text-fg hover:text-mustard" href="#">Instagram</a></li>
         </ul>
         <p class="mt-5 text-[0.875rem] text-muted">Respondemos em até um dia útil.</p>
@@ -1360,11 +1473,19 @@
     <div class="border-t border-line">
       <div
         class="wrap flex flex-col gap-3 py-6 text-[0.8125rem] text-muted md:flex-row md:items-center md:justify-between">
+        <!-- Identificação do vendedor (exigida para venda pela internet): razão social ou nome, CPF ou CNPJ e endereço -->
         <p>© 2026 IA no Balcão.</p>
-        <nav class="flex gap-6" aria-label="Documentos legais">
-          <a class="footer-link text-muted hover:text-fg" href="#">Termos de uso</a>
-          <a class="footer-link text-muted hover:text-fg" href="#">Política de privacidade</a>
-        </nav>
+        <div class="flex items-center justify-between gap-6 md:justify-end">
+          <nav class="flex gap-6" aria-label="Documentos legais">
+            <a class="footer-link text-muted hover:text-fg" href="#">Termos de uso</a>
+            <a class="footer-link text-muted hover:text-fg" href="#">Política de privacidade</a>
+          </nav>
+          <a class="to-top" href="#topo" aria-label="Voltar ao topo"><svg class="ico" viewBox="0 0 24 24"
+              aria-hidden="true">
+              <path d="m5 12 7-7 7 7" />
+              <path d="M12 19V5" />
+            </svg></a>
+        </div>
       </div>
       <p class="wrap pb-8 text-[0.8125rem] text-faint">Os personagens desta página foram criados com inteligência
         artificial. Os depoimentos são de alunos reais, com fotos ilustrativas criadas com IA.</p>
@@ -1374,12 +1495,13 @@
   <!-- CTA fixo (mobile) -->
   <div class="on-dark sticky-cta" data-sticky-cta>
     <div class="flex items-center justify-between gap-3">
-      <p class="leading-tight">
-        <span class="block font-semibold">R$ 19,80 <span class="text-[0.8125rem] font-normal text-muted">à
-            vista</span></span>
+      <p class="leading-tight whitespace-nowrap">
+        <span class="block font-semibold">R$ 19,80 <span
+            class="text-[0.8125rem] font-normal text-muted max-[359px]:hidden">à vista</span></span>
         <span class="block text-[0.75rem] text-muted">ou 5x de R$ 3,96</span>
       </p>
-      <a href="#oferta" data-checkout class="btn btn-primary">Garantir meu acesso</a>
+      <!-- telas estreitas: abaixo de 400px o "meu" sai, abaixo de 360px sai o "à vista" -->
+      <a href="#oferta" data-checkout class="btn btn-primary"><span>Garantir <span class="max-[399px]:hidden">meu </span>acesso</span></a>
     </div>
   </div>
 
