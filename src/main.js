@@ -71,7 +71,6 @@ function startTyping() {
   const steps = document.querySelectorAll('[data-hero-step]');
   const art = document.querySelector('[data-hero-art]');
   if (!reduceMotion && steps.length) {
-    animate('[data-dots]', { opacity: [0, 1] }, { duration: 1.6, ease: 'easeOut' });
     // o trio entra com uma mola, junto com o texto
     if (art) {
       animate(art, { opacity: [0, 1] }, { duration: 0.4, delay: 0.1 });
@@ -157,105 +156,13 @@ function startTyping() {
 (() => {
   const hero = document.getElementById('topo');
   const inner = document.querySelector('[data-hero-inner]');
-  if (!hero || !inner || reduceMotion) return;
+  // só a partir do tablet: no celular o hero é alto e o efeito deixava a
+  // faixa "Feito para quem tem" parecendo apagada logo na primeira rolagem
+  if (!hero || !inner || reduceMotion || !matchMedia('(min-width: 768px)').matches) return;
   scroll(animate(inner, { y: [0, 120], opacity: [1, 0.1] }, { ease: 'linear' }), {
     target: hero,
     offset: ['start start', 'end start'],
   });
-})();
-
-/* ---------- Hero: grade de pontos com pulsos ----------
-   A grade é desenhada uma vez num canvas fora da tela; a cada quadro
-   só copiamos a grade e desenhamos os poucos pulsos ativos. */
-(() => {
-  const canvas = document.querySelector('[data-dots]');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const GAP = 28;
-  const grid = document.createElement('canvas');
-  const gctx = grid.getContext('2d');
-  let w = 0, h = 0, dpr = 1, cols = 0, rows = 0, ox = 0;
-  let pulses = [];
-  let running = false, raf = 0, lastSpawn = 0;
-
-  function resize() {
-    const rect = canvas.getBoundingClientRect();
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = rect.width; h = rect.height;
-    for (const c of [canvas, grid]) {
-      c.width = Math.round(w * dpr);
-      c.height = Math.round(h * dpr);
-    }
-    cols = Math.ceil(w / GAP) + 1;
-    rows = Math.ceil(h / GAP) + 1;
-    ox = (w % GAP) / 2;
-    gctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    gctx.clearRect(0, 0, w, h);
-    gctx.fillStyle = 'rgba(37,45,50,0.15)';
-    for (let x = 0; x < cols; x++) {
-      for (let y = 0; y < rows; y++) {
-        gctx.beginPath();
-        gctx.arc(ox + x * GAP, 12 + y * GAP, 1, 0, Math.PI * 2);
-        gctx.fill();
-      }
-    }
-    draw(performance.now());
-  }
-
-  function spawn(now) {
-    // pulsos se concentram na faixa central, onde fica o título
-    const cx = Math.round(cols / 2 + (Math.random() - 0.5) * cols * 0.85);
-    const cy = Math.round(rows * 0.45 + (Math.random() - 0.5) * rows * 0.8);
-    pulses.push({ x: ox + cx * GAP, y: 12 + cy * GAP, t0: now, life: 2600 + Math.random() * 1400 });
-  }
-
-  function draw(now) {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(grid, 0, 0);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    pulses = pulses.filter((p) => now - p.t0 < p.life);
-    for (const p of pulses) {
-      const k = (now - p.t0) / p.life;
-      const a = Math.sin(k * Math.PI);
-      ctx.fillStyle = `rgba(242,201,76,${0.45 * a})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 4 + 9 * k, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = `rgba(37,45,50,${0.7 * a})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  function frame(now) {
-    if (now - lastSpawn > 420 && pulses.length < 12) {
-      spawn(now);
-      lastSpawn = now;
-    }
-    draw(now);
-    raf = requestAnimationFrame(frame);
-  }
-
-  function setRunning(on) {
-    if (reduceMotion || on === running) return;
-    running = on;
-    if (on) raf = requestAnimationFrame(frame);
-    else cancelAnimationFrame(raf);
-  }
-
-  resize();
-  let rt;
-  window.addEventListener('resize', () => {
-    clearTimeout(rt);
-    rt = setTimeout(resize, 150);
-  });
-  inView(canvas, () => {
-    setRunning(true);
-    return () => setRunning(false);
-  });
-  document.addEventListener('visibilitychange', () => setRunning(!document.hidden));
 })();
 
 /* ---------- Entrada ao rolar ----------
@@ -457,6 +364,186 @@ if (!reduceMotion) {
     return () => animate(el, { scale: 1 }, { type: 'spring', visualDuration: 0.35, bounce: 0.45 });
   });
 }
+
+/* ---------- Galeria de personagens ----------
+   Duas faixas em sentidos opostos que andam sozinhas e aceitam arrastar
+   (mouse ou dedo), com embalo ao soltar. Param com o mouse em cima ou com
+   foco no teclado, e só rodam com a galeria na tela. Com movimento
+   reduzido, não andam sozinhas, mas continuam arrastáveis. */
+(() => {
+  const rows = [...document.querySelectorAll('[data-gallery-row]')];
+  if (!rows.length) return;
+  const SPEED = 30; // px por segundo
+
+  const TILTS = ['-2deg', '1.5deg', '-1deg', '2.5deg'];
+
+  const states = rows.map((row) => {
+    const track = row.querySelector('.gallery-track');
+    row.classList.add('is-js');
+    // a inclinação vai fixa em cada carta: assim as cópias repetem
+    // exatamente a mesma sequência e a emenda do laço não aparece
+    [...track.children].forEach((li, i) => li.style.setProperty('--r', TILTS[i % TILTS.length]));
+    return {
+      row,
+      track,
+      originals: [...track.children],
+      dir: Number(row.dataset.dir || 1),
+      pos: 0,
+      period: 0,
+      vel: 0,
+      drag: null,
+      moved: false,
+      paused: false,
+    };
+  });
+
+  // repete as cartas até cobrir a largura da tela mais uma volta inteira,
+  // para o laço não deixar vão. As cópias ficam fora da leitura e do Tab.
+  function layout(st) {
+    st.track.querySelectorAll('[data-clone]').forEach((n) => n.remove());
+    const addSet = () => st.originals.forEach((li) => {
+      const c = li.cloneNode(true);
+      c.dataset.clone = '';
+      c.setAttribute('aria-hidden', 'true');
+      c.querySelectorAll('a').forEach((a) => { a.tabIndex = -1; });
+      st.track.append(c);
+    });
+    addSet();
+    st.period = st.track.children[st.originals.length].offsetLeft - st.originals[0].offsetLeft;
+    let sets = 2;
+    while (st.period > 0 && sets * st.period < st.period + st.row.clientWidth) { addSet(); sets++; }
+    st.pos = wrap(st, st.pos);
+    paint(st);
+  }
+  const wrap = (st, x) => (st.period ? ((x % st.period) + st.period) % st.period : 0);
+  const paint = (st) => { st.track.style.transform = `translate3d(${-st.pos}px,0,0)`; };
+
+  states.forEach((st) => {
+    const { row } = st;
+    row.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') st.paused = true; });
+    row.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') st.paused = false; });
+    row.addEventListener('focusin', () => { st.paused = true; });
+    row.addEventListener('focusout', () => { st.paused = false; });
+
+    row.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      st.drag = { id: e.pointerId, x: e.clientX, pos: st.pos, lastX: e.clientX, lastT: e.timeStamp };
+      st.moved = false;
+      st.vel = 0;
+    });
+    row.addEventListener('pointermove', (e) => {
+      const d = st.drag;
+      if (!d || e.pointerId !== d.id) return;
+      const dx = e.clientX - d.x;
+      if (!st.moved && Math.abs(dx) > 6) {
+        st.moved = true;
+        row.setPointerCapture(e.pointerId);
+        row.classList.add('is-dragging');
+      }
+      if (!st.moved) return;
+      const dt = Math.max(e.timeStamp - d.lastT, 1) / 1000;
+      st.vel = -(e.clientX - d.lastX) / dt;
+      d.lastX = e.clientX;
+      d.lastT = e.timeStamp;
+      st.pos = wrap(st, d.pos - dx);
+      paint(st);
+    });
+    const end = (e) => {
+      if (!st.drag || e.pointerId !== st.drag.id) return;
+      // sem movimento nos últimos instantes, não há embalo
+      if (e.timeStamp - st.drag.lastT > 80) st.vel = 0;
+      st.drag = null;
+      row.classList.remove('is-dragging');
+    };
+    row.addEventListener('pointerup', end);
+    row.addEventListener('pointercancel', end);
+    // quem arrastou não quer abrir o link da vaga
+    row.addEventListener('click', (e) => {
+      if (st.moved) { e.preventDefault(); e.stopPropagation(); st.moved = false; }
+    }, true);
+  });
+
+  let raf = 0;
+  let last = 0;
+  function frame(now) {
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
+    last = now;
+    for (const st of states) {
+      if (st.drag) continue;
+      if (st.vel) {
+        st.pos += st.vel * dt;
+        st.vel *= Math.exp(-dt * 4);
+        if (Math.abs(st.vel) < 8) st.vel = 0;
+      }
+      if (!reduceMotion && !st.paused) st.pos += st.dir * SPEED * dt;
+      st.pos = wrap(st, st.pos);
+      paint(st);
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function setRunning(on) {
+    if (on && !raf) { last = 0; raf = requestAnimationFrame(frame); }
+    if (!on && raf) { cancelAnimationFrame(raf); raf = 0; }
+  }
+
+  states.forEach(layout);
+  // a segunda faixa começa no meio, para as duas não mostrarem a mesma ordem
+  if (states[1]) { states[1].pos = wrap(states[1], states[1].period / 2); paint(states[1]); }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => states.forEach(layout), 150);
+  });
+  new IntersectionObserver(([e]) => setRunning(e.isIntersecting))
+    .observe(rows[0].closest('.gallery'));
+})();
+
+/* ---------- Vídeos dos celulares (seção de números) ----------
+   Tocam sem som, em loop, só enquanto aparecem na tela (e só então
+   começam a baixar). Um toque no vídeo ou no botão liga o som daquele e
+   silencia os outros. Com movimento reduzido, não tocam sozinhos: o toque
+   dá o play. */
+(() => {
+  const videos = [...document.querySelectorAll('[data-reel-video]')];
+  if (!videos.length) return;
+
+  // no celular os aparelhos viram carrossel: abre centrado no do meio
+  const strip = document.querySelector('.phones');
+  const middle = strip && strip.querySelector('.phone.is-center');
+  if (middle && strip.scrollWidth > strip.clientWidth) {
+    strip.scrollLeft = middle.offsetLeft - (strip.clientWidth - middle.offsetWidth) / 2;
+  }
+
+  const button = (v) => v.parentElement.querySelector('.phone-sound');
+  function setSound(v, on) {
+    v.muted = !on;
+    const b = button(v);
+    if (b) {
+      b.setAttribute('aria-pressed', String(on));
+      b.setAttribute('aria-label', on ? 'Desativar o som do vídeo' : 'Ativar o som do vídeo');
+    }
+  }
+
+  videos.forEach((v) => {
+    v.parentElement.addEventListener('click', () => {
+      const on = v.muted;
+      videos.forEach((o) => { if (o !== v) setSound(o, false); });
+      setSound(v, on);
+      if (v.paused) v.play().catch(() => {});
+    });
+  });
+
+  if (reduceMotion) return;
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      const v = e.target;
+      if (e.isIntersecting) v.play().catch(() => {});
+      else { v.pause(); setSound(v, false); }
+    }
+  }, { threshold: 0.35 });
+  videos.forEach((v) => io.observe(v));
+})();
 
 /* ---------- Brilho dos cards seguindo o cursor ---------- */
 if (window.matchMedia('(hover: hover)').matches) {

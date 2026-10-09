@@ -9,7 +9,8 @@
     "build:js": "esbuild src/main.js --bundle --minify --format=iife --target=es2020 --outfile=assets/main.js",
     "dev:css": "tailwindcss -i ./src/input.css -o ./assets/styles.css --watch",
     "dev:js": "esbuild src/main.js --bundle --format=iife --target=es2020 --outfile=assets/main.js --watch",
-    "images": "node scripts/optimize-images.mjs"
+    "images": "node scripts/optimize-images.mjs",
+    "videos": "node scripts/optimize-videos.mjs"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.0",

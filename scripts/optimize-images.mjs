@@ -120,6 +120,26 @@ jobs.push(
     .then((info) => ['og-1200x630.jpg', info]),
 );
 
+// Céus em pixel art (fundo de hero, oferta e CTA final): nuvens embaixo e
+// céu liso em cima. A cor do topo de cada imagem é a mesma do fundo da seção
+// no CSS (.sky-1/2/3), então não aparece emenda. O movimento é feito em CSS.
+const skies = {
+  'Nuvens suaves em pixel art-1.png': 'sky-1',
+  'Céu pastel com nuvens pixeladas-2.png': 'sky-2',
+  'Panorama de nuvens pixeladas suaves-3.png': 'sky-3',
+};
+for (const [file, slug] of Object.entries(skies)) {
+  for (const width of [1086, 2172]) {
+    jobs.push(
+      sharp(`img/${file}`)
+        .resize({ width })
+        .webp({ quality: 88, effort: 6 })
+        .toFile(`${OUT}/${slug}-${width}.webp`)
+        .then((info) => [`${slug}-${width}.webp`, info]),
+    );
+  }
+}
+
 for (const [file, info] of await Promise.all(jobs)) {
   console.log(`${file.padEnd(22)} ${info.width}x${info.height}  ${(info.size / 1024).toFixed(1)} KB`);
 }

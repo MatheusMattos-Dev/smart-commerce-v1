@@ -121,10 +121,8 @@
   @media (min-width: 768px) {
     .section { padding-block: 7rem; }
   }
-
-  /* ---------- Fundos de névoa (tons do petróleo) ---------- */
-  .mist-down { background: linear-gradient(var(--color-mist) 0%, var(--color-mist-2) 48%, var(--color-mist-3) 100%); }
-  .mist-up { background: linear-gradient(var(--color-mist-3) 0%, var(--color-mist-2) 40%, var(--color-mist) 100%); }
+  /* linha de corte: contorno escuro em cima e embaixo da seção */
+  .section-cut { border-block: 2px solid var(--color-ink); }
 
   /* ---------- Tipografia ---------- */
   /* Títulos: peso 800, um pouco estreitos, entrelinha curta e espaço apertado */
@@ -296,13 +294,50 @@
   }
 
   /* ---------- Hero ---------- */
-  .hero-dots {
+  /* céus em pixel art (hero, oferta e CTA final): nuvens presas embaixo e,
+     acima delas, a cor lisa do topo da própria imagem, então não aparece
+     emenda. As nuvens flutuam devagar de um lado para o outro (CSS, 60 fps).
+     A camada é mais larga que a seção para as bordas nunca aparecerem; no
+     celular as nuvens ficam maiores e cortadas nas laterais. */
+  .sky { background-color: var(--sky-color); }
+  .sky::before {
+    content: "";
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 38%, #000 30%, transparent 100%);
-    mask-image: radial-gradient(ellipse 75% 70% at 50% 38%, #000 30%, transparent 100%);
+    inset: 0 -3rem -0.5rem;
+    background: var(--sky-sm) no-repeat center bottom / max(100%, 900px) auto;
+    /* amplia sem suavizar: os pixels da arte continuam nítidos em telas grandes */
+    image-rendering: pixelated;
+    pointer-events: none;
+    animation: sky-drift 36s ease-in-out infinite;
+    will-change: transform;
+  }
+  @media (min-width: 800px) {
+    .sky::before { background-image: var(--sky-lg); }
+  }
+  .sky-1 { --sky-color: #a7d7ee; --sky-sm: url("img/sky-1-1086.webp"); --sky-lg: url("img/sky-1-2172.webp"); }
+  .sky-2 { --sky-color: #a2d8ec; --sky-sm: url("img/sky-2-1086.webp"); --sky-lg: url("img/sky-2-2172.webp"); }
+  .sky-3 { --sky-color: #9ed1ea; --sky-sm: url("img/sky-3-1086.webp"); --sky-lg: url("img/sky-3-2172.webp"); }
+  /* emenda com a seção de baixo: a base das nuvens se dissolve, nos últimos
+     4rem, na cor de fundo da seção seguinte (--fade-to) */
+  .sky-fade {
+    background: linear-gradient(to top, var(--fade-to) 0 4rem, var(--sky-color) 4rem);
+  }
+  .sky-fade::before {
+    -webkit-mask-image: linear-gradient(to top, transparent 0.5rem, #000 4.5rem);
+    mask-image: linear-gradient(to top, transparent 0.5rem, #000 4.5rem);
+  }
+  #topo.sky-fade { --fade-to: var(--color-cream); }
+  #oferta.sky-fade { --fade-to: var(--color-paper); }
+  /* cada céu começa num ponto diferente do vaivém */
+  .sky-2::before { animation-delay: -12s; }
+  .sky-3::before { animation-delay: -24s; }
+  @keyframes sky-drift {
+    0%, 100% { transform: translate3d(-1.25rem, 0, 0); }
+    35% { transform: translate3d(1.5rem, -0.25rem, 0); }
+    70% { transform: translate3d(0.25rem, 0.25rem, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sky::before { animation: none; }
   }
   .hero-haze {
     position: absolute;
@@ -763,13 +798,888 @@
     background: var(--color-mustard);
     box-shadow: 0 3px 0 var(--color-ink);
   }
+  .testi .avatar {
+    width: 3rem;
+    height: 3rem;
+    box-shadow: 0 2px 0 var(--color-ink);
+  }
+  /* card de depoimento: cabeçalho com foto, estrelas, citação e rodapé tracejado */
+  .testi {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 1.375rem 1.25rem;
+  }
+  /* etiqueta presa na borda de cima, à direita */
+  .testi-tag {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    transform: translateY(-55%);
+    padding: 0.25rem 0.625rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 999px;
+    box-shadow: 0 2px 0 var(--color-ink);
+    color: var(--color-ink);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .testi-tag.is-rust { background: #e2683a; }
+  .testi-tag.is-mist { background: var(--color-mist); }
+  .testi-tag.is-mustard { background: var(--color-mustard); }
+  .testi-stars {
+    margin-top: 1.125rem;
+    color: var(--color-ink);
+    font-size: 0.875rem;
+    letter-spacing: 0.12em;
+    line-height: 1;
+  }
+  .testi-quote {
+    flex: 1;
+    margin-top: 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+    text-wrap: pretty;
+  }
+  .testi-foot {
+    margin-top: 1.25rem;
+    padding-top: 0.875rem;
+    border-top: 1.5px dashed var(--color-line-2);
+    color: var(--color-petrol);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
 
-  /* ---------- Fundo de pontos estático (CTA final) ---------- */
-  .dot-field {
-    background-image: radial-gradient(rgb(37 45 50 / 0.14) 1px, transparent 1.2px);
-    background-size: 28px 28px;
-    -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, #000 20%, transparent 100%);
-    mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, #000 20%, transparent 100%);
+  /* ---------- O que você vai criar: cards em tons pastel, inclinados ---------- */
+  /* a inclinação usa `rotate` (e não transform) para não brigar com o
+     translate da animação de entrada */
+  .make-card {
+    --tone: #fbf1d9;
+    /* o texto do card é sempre escuro, mesmo dentro de .on-dark */
+    --color-fg: var(--color-ink);
+    --color-muted: #46525a;
+    --color-accent: #a9471c;
+    display: flex;
+    flex-direction: column;
+    padding: 1.375rem 1.375rem 1.5rem;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-card);
+    background: var(--tone);
+    box-shadow: 0 6px 0 #12171a;
+    color: var(--color-fg);
+    rotate: -1.25deg;
+    transition: rotate 0.25s, translate 0.25s;
+  }
+  .make-card:nth-child(even) { rotate: 1deg; }
+  .make-card:nth-child(3) { rotate: -0.75deg; }
+  .make-card:hover { rotate: 0deg; translate: 0 -3px; }
+  .make-card.is-cream { --tone: #fbf1d9; }
+  .make-card.is-mustard { --tone: var(--color-mustard); }
+  .make-card.is-peach { --tone: #f8d3c2; }
+  .make-card.is-sky { --tone: var(--color-mist-2); }
+  .make-card .ico-box {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #fcfaf6;
+    box-shadow: 0 2px 0 var(--color-ink);
+  }
+  .make-card .ico-box .ico { color: var(--color-accent); }
+  .make-kicker {
+    margin-top: 1.125rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--color-accent);
+  }
+  .make-title {
+    margin-top: 0.375rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 1.15;
+  }
+  .make-text {
+    margin-top: 0.625rem;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .make-card { transition: none; }
+  }
+
+  /* ---------- Garantia: ingresso com recortes laterais e selo estrelado ---------- */
+  .guarantee {
+    position: relative;
+    display: grid;
+    gap: 1.5rem;
+    justify-items: center;
+    padding: 2rem 1.5rem 2.25rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 16px;
+    background: #ecd38c;
+    box-shadow: 0 8px 0 var(--color-ink);
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .guarantee {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      justify-items: start;
+      gap: 2.5rem;
+      padding: 2.5rem 3rem 2.5rem 2.75rem;
+      text-align: left;
+    }
+  }
+  /* os dois recortes de ingresso, na cor do fundo da seção */
+  .guarantee::before,
+  .guarantee::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-top: -0.875rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 999px;
+    background: var(--color-paper);
+  }
+  .guarantee::before {
+    left: calc(-0.875rem - 1px);
+    clip-path: inset(0 0 0 calc(50% - 2px));
+  }
+  .guarantee::after {
+    right: calc(-0.875rem - 1px);
+    clip-path: inset(0 calc(50% - 2px) 0 0);
+  }
+  .guarantee-seal {
+    width: 8.5rem;
+    rotate: -8deg;
+    filter: drop-shadow(0 3px 0 var(--color-ink));
+  }
+  @media (min-width: 768px) {
+    .guarantee-seal { width: 10rem; }
+  }
+  .guarantee-seal polygon {
+    fill: #e2683a;
+    stroke: var(--color-ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .guarantee-seal text {
+    fill: #fff;
+    stroke: var(--color-ink);
+    paint-order: stroke fill;
+    font-family: var(--font-sans);
+    font-weight: 800;
+  }
+  .guarantee-seal .seal-num { font-size: 40px; stroke-width: 4px; }
+  .guarantee-seal .seal-cap { font-size: 7px; stroke-width: 1.6px; letter-spacing: 0.02em; }
+  .guarantee-kicker {
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .guarantee-title {
+    margin-top: 0.375rem;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .guarantee-sub {
+    margin-top: 0.5rem;
+    font-size: 1.125rem;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .guarantee-text {
+    margin-top: 0.875rem;
+    max-width: 38rem;
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  /* ---------- CTA final: dois personagens e a vaga em aberto no meio ---------- */
+  .sticker-text.is-rust { color: #e2683a; }
+  .cta-stack {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cta-pic {
+    width: 6rem;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border: 2px solid var(--color-ink);
+    border-radius: 10px;
+    background: var(--color-mustard);
+    box-shadow: 0 4px 0 var(--color-ink);
+  }
+  .cta-pic.is-left { rotate: -8deg; margin-right: -0.75rem; margin-top: 1.5rem; }
+  .cta-pic.is-right { rotate: 7deg; margin-left: -0.75rem; margin-top: 1.5rem; }
+  .cta-open {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 8.5rem;
+    aspect-ratio: 4 / 5.4;
+    overflow: hidden;
+    padding-top: 1.75rem;
+    border: 2px dashed #c4532a;
+    border-radius: 12px;
+    background: repeating-linear-gradient(135deg, var(--color-card) 0 12px, #f6e6c4 12px 24px);
+    box-shadow: 0 5px 0 rgb(37 45 50 / 0.25);
+  }
+  .cta-open-title {
+    color: #e2683a;
+    -webkit-text-stroke: 0.08em var(--color-ink);
+    paint-order: stroke fill;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 0.95;
+    rotate: -6deg;
+  }
+  .cta-open-ghost {
+    width: 80%;
+    fill: rgb(37 45 50 / 0.14);
+  }
+  @media (min-width: 640px) {
+    .cta-pic { width: 8.5rem; }
+    .cta-open { width: 11.5rem; }
+    .cta-open-title { font-size: 2.125rem; }
+  }
+  .cta-chips {
+    max-width: 22rem;
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 1rem;
+    padding: 0.375rem 1rem;
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.65);
+    color: var(--color-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  /* ---------- O curso em números: celulares e cards de números ---------- */
+  /* azul-claro com grade de pontinhos azuis, como papel pontilhado */
+  .proof-bg {
+    background:
+      radial-gradient(circle, rgb(120 150 220 / 0.35) 1.5px, transparent 2px) center top / 32px 32px,
+      linear-gradient(#eef6fc, #d9eaf7);
+  }
+  .phones {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .phone {
+    position: relative;
+    flex: none;
+    width: 8rem;
+    aspect-ratio: 9 / 18.5;
+    padding: 5px;
+    border: 2px solid var(--color-ink);
+    border-radius: 1.5rem;
+    background: var(--color-ink);
+    box-shadow: 0 6px 0 rgb(37 45 50 / 0.35);
+  }
+  .phone.is-left { rotate: -5deg; margin-right: -1rem; }
+  .phone.is-right { rotate: 5deg; margin-left: -1rem; }
+  .phone.is-center { z-index: 1; width: 9.5rem; margin-bottom: 1.5rem; }
+  /* no celular, os três aparelhos lado a lado ficavam espremidos e os
+     textos se sobrepunham: vira um carrossel de deslizar, um por vez,
+     que abre centrado no do meio (src/main.js) */
+  @media (max-width: 639px) {
+    .phones {
+      align-items: stretch;
+      gap: 1rem;
+      margin-inline: -1rem;
+      padding: 1.25rem calc(50% - 6.5rem) 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      overscroll-behavior-x: contain;
+    }
+    .phones::-webkit-scrollbar { display: none; }
+    .phone,
+    .phone.is-center,
+    .phone.is-left,
+    .phone.is-right {
+      width: 13rem;
+      margin: 0;
+      rotate: 0deg;
+      scroll-snap-align: center;
+    }
+    .phone-burst { right: -0.5rem; top: 2.75rem; width: 4.25rem; }
+    .phone-tag,
+    .phone-handle,
+    .phone-caption { font-size: 0.6875rem; }
+    .phone-stat b { font-size: 0.625rem; }
+  }
+  @media (min-width: 640px) {
+    .phone { width: 11rem; }
+    .phone.is-center { width: 12.5rem; }
+    .phone.is-left { margin-right: 0.75rem; }
+    .phone.is-right { margin-left: 0.75rem; }
+  }
+  .phone-screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 1.2rem;
+    background: var(--color-mustard);
+    color: #fff;
+  }
+  .phone-screen > video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* sombra embaixo para o texto do reel ser legível */
+  .phone-screen::after {
+    content: "";
+    position: absolute;
+    inset: 55% 0 0;
+    background: linear-gradient(transparent, rgb(0 0 0 / 0.6));
+  }
+  /* entalhe da câmera */
+  .phone::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 0.625rem;
+    left: 50%;
+    width: 32%;
+    height: 0.75rem;
+    translate: -50% 0;
+    border-radius: 999px;
+    background: var(--color-ink);
+  }
+  .phone-top {
+    position: absolute;
+    top: 1.75rem;
+    left: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
+  }
+  /* botão de som: alto-falante cortado (mudo) ou com ondas (tocando) */
+  .phone-screen { cursor: pointer; }
+  .phone-sound {
+    position: absolute;
+    z-index: 2;
+    top: 1.5rem;
+    right: 0.5rem;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.45);
+  }
+  .phone-sound svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .phone-sound .on,
+  .phone-sound[aria-pressed="true"] .off { display: none; }
+  .phone-sound[aria-pressed="true"] .on { display: inline; }
+  .phone-icons {
+    position: absolute;
+    z-index: 1;
+    right: 0.5rem;
+    bottom: 3.5rem;
+    display: grid;
+    gap: 0.625rem;
+  }
+  .phone-icons svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.5));
+  }
+  /* ícone com o número embaixo, como no app */
+  .phone-stat {
+    display: grid;
+    justify-items: center;
+    gap: 0.125rem;
+  }
+  .phone-stat b {
+    font-size: 0.5625rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
+  }
+  .phone-caption {
+    position: absolute;
+    z-index: 1;
+    inset: auto 2.25rem 0.75rem 0.75rem;
+    font-size: 0.625rem;
+    line-height: 1.3;
+  }
+  .phone-handle {
+    display: block;
+    margin-bottom: 0.125rem;
+    font-weight: 800;
+  }
+  /* etiqueta amarela presa no alto do aparelho */
+  .phone-tag {
+    position: absolute;
+    z-index: 3;
+    top: -0.75rem;
+    left: 50%;
+    translate: -50% 0;
+    rotate: -3deg;
+    padding: 0.1875rem 0.5rem;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 6px;
+    background: var(--color-mustard);
+    box-shadow: 0 2px 0 var(--color-ink);
+    color: var(--color-ink);
+    font-size: 0.625rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .phone-burst {
+    position: absolute;
+    z-index: 3;
+    top: 2.5rem;
+    right: -1.75rem;
+    width: 4.5rem;
+    rotate: 10deg;
+    filter: drop-shadow(0 3px 0 var(--color-ink));
+  }
+  .phone-burst polygon {
+    fill: #e2683a;
+    stroke: var(--color-ink);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .phone-burst text {
+    fill: #fff;
+    stroke: var(--color-ink);
+    stroke-width: 2px;
+    paint-order: stroke fill;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .phone-burst text.big { font-size: 24px; stroke-width: 3px; }
+  @media (min-width: 640px) {
+    .phone-burst { width: 5.5rem; right: -2.25rem; }
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.875rem;
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 768px) {
+    .stat-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  .stat-card {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    padding: 1rem 0.75rem 1.125rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 14px;
+    background: #fcfaf6;
+    box-shadow: 0 5px 0 var(--color-ink);
+    text-align: center;
+  }
+  .stat-num {
+    color: #c4532a;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .stat-label {
+    margin-top: 0.375rem;
+    color: var(--color-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  /* ---------- Fundo de papel quadriculado ----------
+     Claro na seção de bônus; .bg-grid-dark é a versão escura (O que você
+     vai criar), com linhas claras bem sutis. */
+  .bg-grid {
+    --grid-bg: #f8ecd6;
+    --grid-line: rgb(201 178 132 / 0.22);
+    background-color: var(--grid-bg);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 36px 36px;
+    background-position: center top;
+  }
+  .bg-grid-dark {
+    --grid-bg: var(--color-ink);
+    --grid-line: rgb(237 230 216 / 0.06);
+  }
+
+  /* ---------- Conteúdo do curso: módulos como passos numerados ---------- */
+  /* sublinhado de pincel, em ferrugem, sob a segunda parte do título */
+  .swoosh {
+    padding-bottom: 0.12em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9c60-6 140-8 200-5s70 3 94 1' fill='none' stroke='%23e2683a' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat left bottom / 100% 0.22em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem 1.25rem;
+  }
+  .step-card {
+    --tone: #dcecf7;
+    position: relative;
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem 1.375rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 16px;
+    background: var(--tone);
+    box-shadow: 0 6px 0 var(--color-ink);
+  }
+  @media (min-width: 640px) {
+    .step-card { flex-basis: calc((100% - 1.25rem) / 2); flex-grow: 0; }
+  }
+  @media (min-width: 1024px) {
+    .step-card { flex-basis: calc((100% - 3 * 1.25rem) / 4); }
+  }
+  @media (min-width: 640px) {
+    .step-art { height: 6rem; }
+  }
+  .step-card.is-sky { --tone: #dcecf7; }
+  .step-card.is-cream { --tone: #fbf1d9; }
+  .step-card.is-peach { --tone: #f8d9cb; }
+  .step-card.is-mint { --tone: #e3f3ea; }
+  /* número em círculo ferrugem, sobre o canto do card */
+  .step-num {
+    position: absolute;
+    z-index: 1;
+    top: -0.625rem;
+    left: -0.625rem;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 999px;
+    background: #c4532a;
+    box-shadow: 0 2px 0 var(--color-ink);
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.125rem;
+  }
+  .step-art {
+    display: grid;
+    place-items: center;
+    height: 4.25rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 10px;
+    background: #fcfaf6;
+  }
+  .step-art .ico {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.5rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 12px;
+    background: var(--tone);
+    stroke-width: 1.75;
+    box-shadow: 0 3px 0 var(--color-ink);
+  }
+  .step-kicker {
+    margin-top: 1.125rem;
+    padding-inline: 0.25rem;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+  }
+  .step-title {
+    margin-top: 0.375rem;
+    padding-inline: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 1.15;
+  }
+  .step-list {
+    margin-top: 1rem;
+    padding: 0.875rem 0.25rem 0;
+    border-top: 1.5px dashed var(--color-line-2);
+    display: grid;
+    gap: 0.5rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+  .step-list li {
+    position: relative;
+    padding-left: 1.125rem;
+  }
+  .step-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #c4532a;
+    font-weight: 800;
+  }
+
+  /* ---------- Bônus: dois cards com carimbo e listas ---------- */
+  .pick-card {
+    position: relative;
+    padding: 2rem 1.5rem 1.75rem;
+    border: 2px solid var(--color-ink);
+    border-radius: 18px;
+    background: var(--tone, var(--color-card));
+    box-shadow: 0 7px 0 var(--color-ink);
+  }
+  @media (min-width: 640px) {
+    .pick-card { padding: 2.25rem 2rem 2rem; }
+  }
+  .pick-card.is-mint { --tone: #e3f3ea; }
+  .pick-card.is-sand { --tone: #ecd38c; }
+  /* carimbo inclinado preso na borda de cima */
+  .stamp {
+    position: absolute;
+    top: 0;
+    right: 1.25rem;
+    translate: 0 -50%;
+    rotate: -4deg;
+    padding: 0.25rem 0.75rem;
+    border: 2px solid currentColor;
+    border-radius: 6px;
+    background: #fcfaf6;
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .stamp.is-green { color: #1f7a55; }
+  .stamp.is-rust { color: var(--color-accent); rotate: 4deg; }
+  .pick-title {
+    font-size: 1.625rem;
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 1.1;
+  }
+  .pick-list {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .pick-list li {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .pick-list strong { font-weight: 700; }
+  /* nos bônus, o nome vai em linha própria e os itens respiram mais */
+  .pick-card.is-mint .pick-list { gap: 1.5rem; }
+  .pick-card.is-mint .pick-list strong { display: block; margin-bottom: 0.125rem; font-size: 1rem; }
+  .pick-list s { color: var(--color-faint); }
+  .pick-list em {
+    color: var(--color-accent);
+    font-style: normal;
+    font-weight: 600;
+  }
+  .tick {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.125rem;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 5px;
+    background: #5fbf95;
+    color: var(--color-ink);
+  }
+  .tick .ico {
+    width: 0.8125rem;
+    height: 0.8125rem;
+    stroke-width: 3;
+  }
+  .tick.is-spark { background: #fcfaf6; }
+  .tick.is-spark svg {
+    width: 0.6875rem;
+    height: 0.6875rem;
+    fill: #e2683a;
+  }
+
+  /* ---------- Galeria de personagens (seção do problema) ---------- */
+  /* sem JS, cada faixa rola na horizontal; com JS (.is-js), a faixa anda
+     sozinha e é arrastada pelo src/main.js */
+  .gallery-row {
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-block: 1.25rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .gallery-row::-webkit-scrollbar { display: none; }
+  .gallery-row.is-js {
+    overflow: hidden;
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+  }
+  .gallery-row.is-dragging { cursor: grabbing; }
+  .gallery-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    padding-inline: 1.5rem;
+    will-change: transform;
+  }
+
+  .gal-card {
+    --r: -2deg;
+    position: relative;
+    flex: none;
+    width: 8.5rem;
+    aspect-ratio: 4 / 5;
+    border: 2px solid var(--color-ink);
+    border-radius: 10px;
+    background: var(--color-mustard);
+    box-shadow: 0 4px 0 var(--color-ink);
+    transform: rotate(var(--r));
+  }
+  .gal-card:nth-child(4n + 2) { --r: 1.5deg; }
+  .gal-card:nth-child(4n + 3) { --r: -1deg; }
+  .gal-card:nth-child(4n) { --r: 2.5deg; }
+  @media (min-width: 768px) {
+    .gal-card { width: 10rem; }
+  }
+  .gal-card > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+  /* etiqueta com o tipo de negócio, presa embaixo do retrato */
+  .gal-name {
+    position: absolute;
+    inset-inline: 0.5rem;
+    bottom: 0.5rem;
+    padding: 0.25rem 0.375rem;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 6px;
+    background: var(--color-card);
+    color: var(--color-ink);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* vaga em aberto: o lugar do personagem de quem entrar */
+  .gal-card.is-open {
+    border: 2px dashed var(--color-accent);
+    background: repeating-linear-gradient(135deg, var(--color-card) 0 10px, #f3eadb 10px 20px);
+    box-shadow: 0 4px 0 rgb(169 71 28 / 0.35);
+  }
+  .gal-open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    height: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    color: var(--color-accent);
+    text-align: center;
+    -webkit-user-drag: none;
+  }
+  .gal-plus {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-bottom: 0.25rem;
+    border: 1.5px dashed currentColor;
+    border-radius: 999px;
+  }
+  .gal-open-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-stretch: 92%;
+    line-height: 1;
+  }
+  .gal-open-sub {
+    color: var(--color-muted);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .gal-open:hover .gal-open-title { text-decoration: underline; }
+
+  /* ---------- Rodapé com borda de nuvens ----------
+     O topo do rodapé escuro tem o contorno de nuvens (duas fileiras de
+     bolhas de tamanhos diferentes), subindo sobre o fim do céu do CTA final. */
+  .footer-wave { position: relative; }
+  .footer-wave::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% - 1px);
+    height: 2.75rem;
+    /* três fileiras de bolhas com larguras que não se repetem juntas:
+       o contorno fica irregular, como nuvem de verdade */
+    background:
+      radial-gradient(circle 2.75rem at 50% 100%, var(--color-ink) 97%, transparent 100%) 1.5rem 100% / 6.5rem 2.75rem repeat-x,
+      radial-gradient(circle 2rem at 50% 100%, var(--color-ink) 97%, transparent 100%) 0 100% / 3.25rem 2rem repeat-x,
+      radial-gradient(circle 1.375rem at 50% 100%, var(--color-ink) 96%, transparent 100%) 0.8rem 100% / 2.4rem 1.375rem repeat-x;
+    pointer-events: none;
   }
 
   /* ---------- Faixa de anúncio: letreiro ---------- */
@@ -833,6 +1743,11 @@
     text-underline-offset: 4px;
     transition: color 0.2s;
   }
+  /* no celular, cada link ganha altura de dedo (44px) sem mudar o visual */
+  @media (max-width: 767px) {
+    .footer-link { display: inline-block; padding-block: 0.625rem; }
+    footer ul.space-y-3 > li + li { margin-top: 0; }
+  }
   .footer-link:hover { text-decoration: underline; }
 
   /* ---------- CTA fixo no mobile ---------- */
@@ -855,7 +1770,6 @@
   /* ---------- Estado inicial das entradas (o Motion revela) ---------- */
   .js .reveal,
   .js [data-hero-step],
-  .js [data-dots],
   .js [data-hero-art],
   .js [data-sparkle],
   .js .cap,
@@ -864,8 +1778,7 @@
   @media (prefers-reduced-motion: reduce) {
     .js .reveal,
     .js [data-hero-step],
-    .js [data-dots],
-    .js [data-hero-art],
+      .js [data-hero-art],
     .js [data-sparkle],
     .js .reel-product,
     .js .cap:first-child { opacity: 1; }
