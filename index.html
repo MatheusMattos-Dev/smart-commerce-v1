@@ -35,6 +35,9 @@
 
 <body>
 
+  <!-- barra de progresso da leitura -->
+  <div class="progress" data-progress aria-hidden="true"></div>
+
   <!-- 1. Faixa de anúncio: letreiro que corre (o segundo grupo repete o primeiro para o laço não ter emenda) -->
   <a href="#oferta" class="on-dark ticker" aria-label="Turma com preço de lançamento por tempo limitado. Ver a oferta.">
     <div class="ticker-viewport" aria-hidden="true">
@@ -74,7 +77,7 @@
             <!-- no celular o selo some para o botão de compra caber na primeira tela -->
             <p data-hero-step
               class="mb-6 hidden items-center gap-2 rounded-full border-2 border-ink bg-card px-3.5 py-1.5 text-[0.8125rem] font-semibold text-fg sm:inline-flex">
-              <span class="size-2 rounded-full bg-petrol" aria-hidden="true"></span>Curso em vídeo, prompts e roteiros
+              <span class="size-2 rounded-full bg-petrol" aria-hidden="true"></span>Videoaula, PDF, prompts e roteiros
               prontos
             </p>
 
@@ -100,6 +103,8 @@
           <div class="order-1 md:order-2">
             <!-- palco das telas: cada camada cuida de um movimento (inclinação, flutuação, entrada e toque) -->
             <div class="hero-stage mx-auto max-w-[17rem] sm:max-w-[22rem] md:max-w-[30rem]" data-hero-stage>
+              <!-- raios mostarda girando devagar atrás do trio -->
+              <div class="hero-rays" aria-hidden="true"></div>
               <div class="hero-tilt" data-hero-tilt>
                 <div data-hero-float>
                   <img data-hero-art class="hero-art" src="assets/img/hero-cards-1024.webp"
@@ -135,48 +140,40 @@
             <p
               class="mono border-b border-line-2 px-5 py-4 text-left text-[0.8125rem] text-muted md:border-b-0 md:border-r md:border-line-2 md:py-5 md:whitespace-nowrap">
               Feito para quem tem:</p>
-            <ul class="grid flex-1 grid-cols-2 gap-px bg-line-2 md:flex md:bg-transparent">
-              <li
-                class="flex items-center gap-2.5 bg-card px-5 py-4 text-[0.9375rem] md:flex-1 md:justify-center md:bg-transparent md:px-3">
-                <svg class="ico text-muted" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
-                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                  <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
-                  <path d="M2 7h20" />
-                  <path
-                    d="M22 7v3a2 2 0 0 1-2 2 2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7" />
-                </svg>
-                Loja
-              </li>
-              <li
-                class="flex items-center gap-2.5 bg-card px-5 py-4 text-[0.9375rem] md:flex-1 md:justify-center md:bg-transparent md:px-3">
-                <svg class="ico text-muted" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M11 2v2" />
-                  <path d="M5 2v2" />
-                  <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" />
-                  <path d="M8 15a6 6 0 0 0 12 0v-3" />
-                  <circle cx="20" cy="10" r="2" />
-                </svg>
-                Clínica
-              </li>
-              <li
-                class="flex items-center gap-2.5 bg-card px-5 py-4 text-[0.9375rem] md:flex-1 md:justify-center md:bg-transparent md:px-3">
-                <svg class="ico text-muted" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
-                  <path d="M7 2v20" />
-                  <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
-                </svg>
-                Restaurante
-              </li>
-              <li
-                class="flex items-center gap-2.5 bg-card px-5 py-4 text-[0.9375rem] md:flex-1 md:justify-center md:bg-transparent md:px-3">
-                <svg class="ico text-muted" viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                </svg>
-                Serviços
-              </li>
-            </ul>
+            <!-- cada negócio leva ao exemplo dele em /na prática; o marcador mostarda passa de um em um -->
+            <div class="fit-wrap">
+              <span class="fit-indicator" data-fit-indicator aria-hidden="true"></span>
+              <ul class="fit-list" data-fit>
+                <li><a class="fit-item" href="#pratica" data-fit-tab="tab-loja"
+                    aria-label="Loja: ver o exemplo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" />
+                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                      <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
+                      <path d="M2 7h20" />
+                      <path
+                        d="M22 7v3a2 2 0 0 1-2 2 2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7" />
+                    </svg>Loja</a></li>
+                <li><a class="fit-item" href="#pratica" data-fit-tab="tab-clinica"
+                    aria-label="Clínica: ver o exemplo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M11 2v2" />
+                      <path d="M5 2v2" />
+                      <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" />
+                      <path d="M8 15a6 6 0 0 0 12 0v-3" />
+                      <circle cx="20" cy="10" r="2" />
+                    </svg>Clínica</a></li>
+                <li><a class="fit-item" href="#pratica" data-fit-tab="tab-restaurante"
+                    aria-label="Restaurante: ver o exemplo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                      <path d="M7 2v20" />
+                      <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                    </svg>Restaurante</a></li>
+                <li><a class="fit-item" href="#pratica" data-fit-tab="tab-servicos"
+                    aria-label="Serviços: ver o exemplo"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                    </svg>Serviços</a></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -191,10 +188,13 @@
               <path d="M12 9v4" />
               <path d="M12 17h.01" />
             </svg>O problema de quem vende</p>
-          <h2 class="h2 mx-auto mt-5 max-w-4xl">Divulgar todo dia cansa. <span class="text-accent">Aparecer no vídeo, mais ainda.</span></h2>
-          <p class="lead mx-auto mt-5">Quem vende pelo Instagram sabe: sem vídeo, o alcance cai. E nem todo mundo tem tempo,
+          <h2 class="h2 mx-auto mt-5 max-w-4xl">Divulgar todo dia cansa. <span class="text-accent">Aparecer no vídeo,
+              mais ainda.</span></h2>
+          <p class="lead mx-auto mt-5">Quem vende pelo Instagram sabe: sem vídeo, o alcance cai. E nem todo mundo tem
+            tempo,
             coragem ou dinheiro para gravar. Um personagem aparece no seu lugar, todo dia, sem vergonha e sem cachê.</p>
-          <p class="mono mx-auto mt-4 text-[0.6875rem] text-faint">Retratos de exemplo criados com IA, cada um pensado para um tipo de negócio.</p>
+          <p class="mono mx-auto mt-4 text-[0.6875rem] text-faint">Retratos de exemplo criados com IA, cada um pensado
+            para um tipo de negócio.</p>
         </div>
       </div>
 
@@ -202,35 +202,70 @@
       <div class="gallery reveal mt-12" role="region" aria-label="Galeria de personagens">
         <div class="gallery-row" data-gallery-row>
           <ul class="gallery-track">
-              <li class="gal-card"><img src="assets/img/cs001-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Livraria</span></li>
-              <li class="gal-card"><img src="assets/img/cavalheiro-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Alfaiataria</span></li>
-              <li class="gal-card"><img src="assets/img/cs003-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Padaria</span></li>
-              <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu próprio personagem</span></a></li>
-              <li class="gal-card"><img src="assets/img/cs005-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Ótica</span></li>
-              <li class="gal-card"><img src="assets/img/dama-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Doceria</span></li>
-              <li class="gal-card"><img src="assets/img/cs006-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Barbearia</span></li>
-              <li class="gal-card"><img src="assets/img/cs009-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Floricultura</span></li>
-              <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu próprio personagem</span></a></li>
+            <li class="gal-card"><img src="assets/img/cs001-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Livraria</span></li>
+            <li class="gal-card"><img src="assets/img/cavalheiro-256.webp" width="256" height="320" alt=""
+                loading="lazy" decoding="async" draggable="false"><span class="gal-name">Alfaiataria</span></li>
+            <li class="gal-card"><img src="assets/img/cs003-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Padaria</span></li>
+            <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg
+                    class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                  </svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu
+                  próprio personagem</span></a></li>
+            <li class="gal-card"><img src="assets/img/cs005-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Ótica</span></li>
+            <li class="gal-card"><img src="assets/img/dama-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Doceria</span></li>
+            <li class="gal-card"><img src="assets/img/cs006-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Barbearia</span></li>
+            <li class="gal-card"><img src="assets/img/cs009-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Floricultura</span></li>
+            <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg
+                    class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                  </svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu
+                  próprio personagem</span></a></li>
           </ul>
         </div>
         <div class="gallery-row" data-gallery-row data-dir="-1">
           <ul class="gallery-track">
-              <li class="gal-card"><img src="assets/img/pompadour-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Loja de roupas</span></li>
-              <li class="gal-card"><img src="assets/img/cs002-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Assistência técnica</span></li>
-              <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu próprio personagem</span></a></li>
-              <li class="gal-card"><img src="assets/img/elegancia-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Clínica estética</span></li>
-              <li class="gal-card"><img src="assets/img/cs003-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Padaria</span></li>
-              <li class="gal-card"><img src="assets/img/cs001-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Livraria</span></li>
-              <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu próprio personagem</span></a></li>
-              <li class="gal-card"><img src="assets/img/dama-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Doceria</span></li>
-              <li class="gal-card"><img src="assets/img/cavalheiro-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async" draggable="false"><span class="gal-name">Alfaiataria</span></li>
+            <li class="gal-card"><img src="assets/img/pompadour-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Loja de roupas</span></li>
+            <li class="gal-card"><img src="assets/img/cs002-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Assistência técnica</span></li>
+            <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg
+                    class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                  </svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu
+                  próprio personagem</span></a></li>
+            <li class="gal-card"><img src="assets/img/elegancia-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Clínica estética</span></li>
+            <li class="gal-card"><img src="assets/img/cs003-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Padaria</span></li>
+            <li class="gal-card"><img src="assets/img/cs001-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Livraria</span></li>
+            <li class="gal-card is-open"><a href="#oferta" data-checkout class="gal-open"><span class="gal-plus"><svg
+                    class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                  </svg></span><span class="gal-open-title">Acesso aberto</span><span class="gal-open-sub">Crie o seu
+                  próprio personagem</span></a></li>
+            <li class="gal-card"><img src="assets/img/dama-256.webp" width="256" height="320" alt="" loading="lazy"
+                decoding="async" draggable="false"><span class="gal-name">Doceria</span></li>
+            <li class="gal-card"><img src="assets/img/cavalheiro-256.webp" width="256" height="320" alt=""
+                loading="lazy" decoding="async" draggable="false"><span class="gal-name">Alfaiataria</span></li>
           </ul>
         </div>
       </div>
 
       <div class="wrap reveal mt-8 text-center">
         <p class="mono text-[0.75rem] text-faint" aria-hidden="true">← arraste a galeria →</p>
-        <a href="#oferta" data-checkout class="btn btn-primary mt-5">Criar meu personagem <span aria-hidden="true">→</span></a>
+        <a href="#oferta" data-checkout class="btn btn-primary mt-5">Criar meu personagem <span
+            aria-hidden="true">→</span></a>
       </div>
     </section>
 
@@ -242,91 +277,145 @@
               <circle cx="12" cy="8" r="5" />
               <path d="M20 21a8 8 0 0 0-16 0" />
             </svg>O que você vai criar</p>
-          <h2 class="h2 mx-auto mt-5 max-w-3xl">Você sai do curso com um personagem <span class="text-mustard">trabalhando para a sua marca.</span></h2>
+          <h2 class="h2 mx-auto mt-5 max-w-3xl">Você sai da aula com um personagem <span
+              class="text-mustard">trabalhando para a sua marca.</span></h2>
           <p class="lead mx-auto mt-5">E com tudo o que ele precisa para aparecer no seu Instagram, no WhatsApp e
             nos seus anúncios.</p>
         </div>
 
         <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <article class="make-card is-cream reveal" style="--d:0">
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
-            <p class="make-kicker">criado no módulo 02</p>
+          <article class="make-card is-cream reveal" style="--d:0" data-tilt>
+            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="5" />
+                <path d="M20 21a8 8 0 0 0-16 0" />
+              </svg></div>
+            <p class="make-kicker">feito na videoaula</p>
             <h3 class="make-title">Seu personagem exclusivo</h3>
-            <p class="make-text">Um rosto só seu, com estilo, roupa e jeito de falar que combinam com a sua marca. Sempre igual, em todas as cenas.</p>
+            <p class="make-text">Um rosto só seu, com estilo, roupa e jeito de falar que combinam com a sua marca.
+              Sempre igual, em todas as cenas.</p>
           </article>
 
-          <article class="make-card is-mustard reveal" style="--d:1">
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div>
-            <p class="make-kicker">criado no módulo 04</p>
+          <article class="make-card is-mustard reveal" style="--d:1" data-tilt>
+            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
+                <rect x="2" y="6" width="14" height="12" rx="2" />
+              </svg></div>
+            <p class="make-kicker">feito na videoaula</p>
             <h3 class="make-title">Vídeos falando dos seus produtos</h3>
-            <p class="make-text">Vídeos verticais em que o personagem apresenta, mostra e recomenda o que você vende, com voz e boca sincronizadas.</p>
+            <p class="make-text">Vídeos verticais em que o personagem apresenta, mostra e recomenda o que você vende,
+              com voz e boca sincronizadas.</p>
           </article>
 
-          <article class="make-card is-peach reveal" style="--d:2">
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>
-            <p class="make-kicker">criado no módulo 03</p>
+          <article class="make-card is-peach reveal" style="--d:2" data-tilt>
+            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <circle cx="9" cy="9" r="2" />
+                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+              </svg></div>
+            <p class="make-kicker">com o pacote de cenários</p>
             <h3 class="make-title">Fotos com o produto na mão</h3>
-            <p class="make-text">Posts e stories em que o personagem usa, segura ou prova o seu produto real, no cenário que você escolher.</p>
+            <p class="make-text">Posts e stories em que o personagem usa, segura ou prova o seu produto real, no cenário
+              que você escolher.</p>
           </article>
 
-          <article class="make-card is-sky reveal" style="--d:3">
-            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M13 8H7"/><path d="M17 12H7"/></svg></div>
-            <p class="make-kicker">criado no módulo 05</p>
+          <article class="make-card is-sky reveal" style="--d:3" data-tilt>
+            <div class="ico-box"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                <path d="M13 8H7" />
+                <path d="M17 12H7" />
+              </svg></div>
+            <p class="make-kicker">com os 60+ roteiros</p>
             <h3 class="make-title">Roteiros que fazem vender</h3>
-            <p class="make-text">Ganchos, falas e chamadas para ação prontos para Reels, TikTok e anúncios, adaptados ao seu tipo de negócio.</p>
+            <p class="make-text">Ganchos, falas e chamadas para ação prontos para Reels, TikTok e anúncios, adaptados ao
+              seu tipo de negócio.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- 6. /na prática: o comando que o aluno escreve e o vídeo que sai dele -->
-    <section id="pratica" class="on-dark on-petrol section bg-petrol">
+    <!-- 6. /na prática: a ficha que o aluno preenche e o vídeo que sai dela -->
+    <section id="pratica" class="on-dark on-petrol section overflow-hidden bg-petrol">
       <div class="wrap">
-        <div class="reveal">
-          <p class="label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
-              <rect x="2" y="6" width="14" height="12" rx="2" />
-            </svg>Direto da gravação</p>
-          <h2 class="h2 mt-5 max-w-2xl">Você descreve a cena. O personagem grava o vídeo.</h2>
-          <p class="lead mt-4">Escolha um tipo de negócio e veja o comando que você vai aprender a escrever e o vídeo
-            que sai dele.</p>
-        </div>
-
-        <div class="reveal mt-10">
-          <div role="tablist" aria-label="Exemplos por tipo de negócio"
-            class="relative grid grid-cols-2 gap-1 rounded-[1.75rem] border-2 border-line-2 bg-card p-1 sm:inline-grid sm:grid-cols-4 sm:rounded-full"
-            data-tabs>
-            <span class="tab-indicator" data-tab-indicator aria-hidden="true"></span>
-            <button role="tab" id="tab-loja" aria-controls="painel-loja" aria-selected="true" class="tab">Loja</button>
-            <button role="tab" id="tab-clinica" aria-controls="painel-clinica" aria-selected="false" tabindex="-1"
-              class="tab">Clínica</button>
-            <button role="tab" id="tab-restaurante" aria-controls="painel-restaurante" aria-selected="false"
-              tabindex="-1" class="tab">Restaurante</button>
-            <button role="tab" id="tab-servicos" aria-controls="painel-servicos" aria-selected="false" tabindex="-1"
-              class="tab">Serviços</button>
+        <div class="reveal grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_auto]">
+          <div>
+            <p class="label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
+                <rect x="2" y="6" width="14" height="12" rx="2" />
+              </svg>Direto da gravação</p>
+            <h2 class="h2 mt-5 max-w-2xl">Você descreve a cena. <span class="sticker-text">O personagem grava o
+                vídeo.</span></h2>
+            <p class="lead mt-4">Escolha um tipo de negócio e veja o comando que você vai aprender a escrever e o vídeo
+              que sai dele.</p>
           </div>
 
+          <div role="tablist" aria-label="Exemplos por tipo de negócio"
+            class="tabbar relative grid grid-cols-2 gap-1 rounded-[1.75rem] p-1 sm:inline-grid sm:grid-cols-4 sm:rounded-full"
+            data-tabs>
+            <span class="tab-indicator" data-tab-indicator aria-hidden="true"></span>
+            <button role="tab" id="tab-loja" aria-controls="painel-loja" aria-selected="true"
+              class="tab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>Loja</button>
+            <button role="tab" id="tab-clinica" aria-controls="painel-clinica" aria-selected="false" tabindex="-1"
+              class="tab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 2v2" /><path d="M5 2v2" /><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /><path d="M8 15a6 6 0 0 0 12 0v-3" /><circle cx="20" cy="10" r="2" /></svg>Clínica</button>
+            <button role="tab" id="tab-restaurante" aria-controls="painel-restaurante" aria-selected="false" tabindex="-1"
+              class="tab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></svg>Restaurante</button>
+            <button role="tab" id="tab-servicos" aria-controls="painel-servicos" aria-selected="false" tabindex="-1"
+              class="tab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>Serviços</button>
+          </div>
+        </div>
+
+        <div class="reveal mt-10 md:mt-12">
           <!-- Loja -->
-          <div role="tabpanel" id="painel-loja" aria-labelledby="tab-loja" tabindex="0"
-            class="card mt-4 grid overflow-hidden md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]" data-panel>
-            <div class="border-b border-line md:border-b-0 md:border-r">
-              <div class="pane-head"><span class="mono text-faint">o que você escreve</span></div>
-              <pre class="prompt-code"><span class="dim">Personagem:</span> <b>Dona Lina</b>, 35 anos, ruiva de coque
-alto, óculos gatinho e blazer de pied-de-poule.
-
-<span class="dim">Cena:</span> provador da loja <b>Vila Linho</b>, luz de janela.
-<span class="dim">Ação:</span> segura o vestido verde de linho e fala
-com a câmera, animada.
-
-<span class="dim">Formato:</span> vídeo vertical, 15 segundos.
-<span class="dim">Fala:</span> "Gente, chegou o vestido de linho verde..."</pre>
-            </div>
-            <div class="flex flex-col">
-              <div class="pane-head">
-                <span class="mono text-faint">o vídeo que sai</span>
-                <span class="mono ml-auto text-[0.6875rem] text-faint">Reels, 15 s</span>
+          <div role="tabpanel" id="painel-loja" aria-labelledby="tab-loja" tabindex="0" class="demo"
+            data-panel>
+            <div class="slip">
+              <div class="slip-head">
+                <span class="slip-dots" aria-hidden="true"><i></i><i></i><i></i></span>O que você escreve
+                <span class="mono">comando 01</span>
               </div>
-              <div class="grid flex-1 place-items-center p-6 sm:p-8">
+              <dl class="slip-fields">
+                <div class="slip-row">
+                  <dt>Personagem</dt>
+                  <dd><b>Dona Lina</b>, 35 anos, ruiva de coque alto, óculos gatinho e blazer de pied-de-poule.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Cena</dt>
+                  <dd>provador da loja <b>Vila Linho</b>, luz de janela.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Ação</dt>
+                  <dd>segura o vestido verde de linho e fala com a câmera, animada.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Formato</dt>
+                  <dd>vídeo vertical, 15 segundos.</dd>
+                </div>
+                <div class="slip-row is-speech">
+                  <dt>Fala</dt>
+                  <dd class="slip-speech" data-speech><span class="speech-full">“Gente, chegou o vestido de linho verde…”</span></dd>
+                </div>
+              </dl>
+              <div class="slip-foot">
+                <button type="button" class="btn btn-primary btn-sm" data-generate><svg class="ico size-4"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                  </svg>Gerar vídeo</button>
+                <span class="slip-hint">toque para ver de novo</span>
+              </div>
+            </div>
+
+            <div class="flow" aria-hidden="true">
+              <svg class="flow-arrow" viewBox="0 0 100 44">
+                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
+                <path d="M80 12.5 92.5 22 77 26.5" />
+              </svg>
+            </div>
+
+            <div class="stage">
+              <svg class="stage-burst" viewBox="0 0 100 100" aria-hidden="true">
+                <polygon points="50.0,2.0 58.0,9.8 68.4,5.7 72.8,15.9 83.9,16.1 84.1,27.2 94.3,31.6 90.2,42.0 98.0,50.0 90.2,58.0 94.3,68.4 84.1,72.8 83.9,83.9 72.8,84.1 68.4,94.3 58.0,90.2 50.0,98.0 42.0,90.2 31.6,94.3 27.2,84.1 16.1,83.9 15.9,72.8 5.7,68.4 9.8,58.0 2.0,50.0 9.8,42.0 5.7,31.6 15.9,27.2 16.1,16.1 27.2,15.9 31.6,5.7 42.0,9.8" />
+              </svg>
+              <div class="reel-wrap">
+                <span class="stage-chip">O vídeo que sai</span>
                 <div class="reel" data-reel>
                   <img src="assets/img/cs005-reel.webp" width="360" height="640" loading="lazy" decoding="async"
                     alt="Dona Lina, personagem criada com IA para a loja Vila Linho">
@@ -334,36 +423,68 @@ com a câmera, animada.
                   <span class="reel-tag">Vila Linho</span>
                   <span class="reel-product">Vestido de linho<b>R$ 189</b></span>
                   <div class="reel-captions">
-                    <p class="cap"><span>Gente, chegou o vestido de linho verde.</span></p>
-                    <p class="cap"><span>Fresquinho, não amassa e vai do P ao GG.</span></p>
-                    <p class="cap"><span>Corre no direct que tem pouca peça!</span></p>
+                      <p class="cap"><span>Gente, chegou o vestido de linho verde.</span></p>
+                      <p class="cap"><span>Fresquinho, não amassa e vai do P ao GG.</span></p>
+                      <p class="cap"><span>Corre no direct que tem pouca peça!</span></p>
                   </div>
+                  <div class="reel-render" aria-hidden="true"><span>gerando vídeo</span></div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Clínica -->
-          <div role="tabpanel" id="painel-clinica" aria-labelledby="tab-clinica" tabindex="0"
-            class="card mt-4 grid overflow-hidden md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]" data-panel>
-            <div class="border-b border-line md:border-b-0 md:border-r">
-              <div class="pane-head"><span class="mono text-faint">o que você escreve</span></div>
-              <pre class="prompt-code"><span class="dim">Personagem:</span> <b>Tadeu</b>, recepcionista, ruivo de
-franja, óculos redondos e gravata-borboleta.
-
-<span class="dim">Cena:</span> recepção da <b>Clínica Sorriso Leve</b>.
-<span class="dim">Ação:</span> fala com a câmera em tom calmo e
-aponta para a agenda no balcão.
-
-<span class="dim">Formato:</span> vídeo vertical, 15 segundos.
-<span class="dim">Fala:</span> "Faz quanto tempo que você não limpa..."</pre>
-            </div>
-            <div class="flex flex-col">
-              <div class="pane-head">
-                <span class="mono text-faint">o vídeo que sai</span>
-                <span class="mono ml-auto text-[0.6875rem] text-faint">Reels, 15 s</span>
+          <div role="tabpanel" id="painel-clinica" aria-labelledby="tab-clinica" tabindex="0" class="demo"
+            data-panel hidden>
+            <div class="slip">
+              <div class="slip-head">
+                <span class="slip-dots" aria-hidden="true"><i></i><i></i><i></i></span>O que você escreve
+                <span class="mono">comando 02</span>
               </div>
-              <div class="grid flex-1 place-items-center p-6 sm:p-8">
+              <dl class="slip-fields">
+                <div class="slip-row">
+                  <dt>Personagem</dt>
+                  <dd><b>Tadeu</b>, recepcionista, ruivo de franja, óculos redondos e gravata-borboleta.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Cena</dt>
+                  <dd>recepção da <b>Clínica Sorriso Leve</b>.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Ação</dt>
+                  <dd>fala com a câmera em tom calmo e aponta para a agenda no balcão.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Formato</dt>
+                  <dd>vídeo vertical, 15 segundos.</dd>
+                </div>
+                <div class="slip-row is-speech">
+                  <dt>Fala</dt>
+                  <dd class="slip-speech" data-speech><span class="speech-full">“Faz quanto tempo que você não limpa…”</span></dd>
+                </div>
+              </dl>
+              <div class="slip-foot">
+                <button type="button" class="btn btn-primary btn-sm" data-generate><svg class="ico size-4"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                  </svg>Gerar vídeo</button>
+                <span class="slip-hint">toque para ver de novo</span>
+              </div>
+            </div>
+
+            <div class="flow" aria-hidden="true">
+              <svg class="flow-arrow" viewBox="0 0 100 44">
+                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
+                <path d="M80 12.5 92.5 22 77 26.5" />
+              </svg>
+            </div>
+
+            <div class="stage">
+              <svg class="stage-burst" viewBox="0 0 100 100" aria-hidden="true">
+                <polygon points="50.0,2.0 58.0,9.8 68.4,5.7 72.8,15.9 83.9,16.1 84.1,27.2 94.3,31.6 90.2,42.0 98.0,50.0 90.2,58.0 94.3,68.4 84.1,72.8 83.9,83.9 72.8,84.1 68.4,94.3 58.0,90.2 50.0,98.0 42.0,90.2 31.6,94.3 27.2,84.1 16.1,83.9 15.9,72.8 5.7,68.4 9.8,58.0 2.0,50.0 9.8,42.0 5.7,31.6 15.9,27.2 16.1,16.1 27.2,15.9 31.6,5.7 42.0,9.8" />
+              </svg>
+              <div class="reel-wrap">
+                <span class="stage-chip">O vídeo que sai</span>
                 <div class="reel" data-reel>
                   <img src="assets/img/cs002-reel.webp" width="360" height="640" loading="lazy" decoding="async"
                     alt="Tadeu, personagem criado com IA para a Clínica Sorriso Leve">
@@ -371,36 +492,68 @@ aponta para a agenda no balcão.
                   <span class="reel-tag">Clínica Sorriso Leve</span>
                   <span class="reel-product">Limpeza<b>R$ 180</b></span>
                   <div class="reel-captions">
-                    <p class="cap"><span>Faz quanto tempo que você não limpa os dentes?</span></p>
-                    <p class="cap"><span>A limpeza completa sai por R$ 180.</span></p>
-                    <p class="cap"><span>Tem horário no sábado. Chama no WhatsApp!</span></p>
+                      <p class="cap"><span>Faz quanto tempo que você não limpa os dentes?</span></p>
+                      <p class="cap"><span>A limpeza completa sai por R$ 180.</span></p>
+                      <p class="cap"><span>Tem horário no sábado. Chama no WhatsApp!</span></p>
                   </div>
+                  <div class="reel-render" aria-hidden="true"><span>gerando vídeo</span></div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Restaurante -->
-          <div role="tabpanel" id="painel-restaurante" aria-labelledby="tab-restaurante" tabindex="0"
-            class="card mt-4 grid overflow-hidden md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]" data-panel>
-            <div class="border-b border-line md:border-b-0 md:border-r">
-              <div class="pane-head"><span class="mono text-faint">o que você escreve</span></div>
-              <pre class="prompt-code"><span class="dim">Personagem:</span> <b>Seu Augusto</b>, bigode enorme,
-monóculo e terno de tweed marrom.
-
-<span class="dim">Cena:</span> mesa da <b>Cantina da Nonna</b>, com a
-travessa de lasanha ainda fumegando.
-<span class="dim">Ação:</span> prova uma garfada e fala com a câmera.
-
-<span class="dim">Formato:</span> vídeo vertical, 15 segundos.
-<span class="dim">Fala:</span> "Domingo é dia de lasanha da nonna..."</pre>
-            </div>
-            <div class="flex flex-col">
-              <div class="pane-head">
-                <span class="mono text-faint">o vídeo que sai</span>
-                <span class="mono ml-auto text-[0.6875rem] text-faint">Reels, 15 s</span>
+          <div role="tabpanel" id="painel-restaurante" aria-labelledby="tab-restaurante" tabindex="0" class="demo"
+            data-panel hidden>
+            <div class="slip">
+              <div class="slip-head">
+                <span class="slip-dots" aria-hidden="true"><i></i><i></i><i></i></span>O que você escreve
+                <span class="mono">comando 03</span>
               </div>
-              <div class="grid flex-1 place-items-center p-6 sm:p-8">
+              <dl class="slip-fields">
+                <div class="slip-row">
+                  <dt>Personagem</dt>
+                  <dd><b>Seu Augusto</b>, bigode enorme, monóculo e terno de tweed marrom.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Cena</dt>
+                  <dd>mesa da <b>Cantina da Nonna</b>, com a travessa de lasanha ainda fumegando.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Ação</dt>
+                  <dd>prova uma garfada e fala com a câmera.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Formato</dt>
+                  <dd>vídeo vertical, 15 segundos.</dd>
+                </div>
+                <div class="slip-row is-speech">
+                  <dt>Fala</dt>
+                  <dd class="slip-speech" data-speech><span class="speech-full">“Domingo é dia de lasanha da nonna…”</span></dd>
+                </div>
+              </dl>
+              <div class="slip-foot">
+                <button type="button" class="btn btn-primary btn-sm" data-generate><svg class="ico size-4"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                  </svg>Gerar vídeo</button>
+                <span class="slip-hint">toque para ver de novo</span>
+              </div>
+            </div>
+
+            <div class="flow" aria-hidden="true">
+              <svg class="flow-arrow" viewBox="0 0 100 44">
+                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
+                <path d="M80 12.5 92.5 22 77 26.5" />
+              </svg>
+            </div>
+
+            <div class="stage">
+              <svg class="stage-burst" viewBox="0 0 100 100" aria-hidden="true">
+                <polygon points="50.0,2.0 58.0,9.8 68.4,5.7 72.8,15.9 83.9,16.1 84.1,27.2 94.3,31.6 90.2,42.0 98.0,50.0 90.2,58.0 94.3,68.4 84.1,72.8 83.9,83.9 72.8,84.1 68.4,94.3 58.0,90.2 50.0,98.0 42.0,90.2 31.6,94.3 27.2,84.1 16.1,83.9 15.9,72.8 5.7,68.4 9.8,58.0 2.0,50.0 9.8,42.0 5.7,31.6 15.9,27.2 16.1,16.1 27.2,15.9 31.6,5.7 42.0,9.8" />
+              </svg>
+              <div class="reel-wrap">
+                <span class="stage-chip">O vídeo que sai</span>
                 <div class="reel" data-reel>
                   <img src="assets/img/cs003-reel.webp" width="360" height="640" loading="lazy" decoding="async"
                     alt="Seu Augusto, personagem criado com IA para a Cantina da Nonna">
@@ -408,37 +561,68 @@ travessa de lasanha ainda fumegando.
                   <span class="reel-tag">Cantina da Nonna</span>
                   <span class="reel-product">Lasanha<b>à bolonhesa</b></span>
                   <div class="reel-captions">
-                    <p class="cap"><span>Domingo é dia de lasanha da nonna.</span></p>
-                    <p class="cap"><span>Massa aberta à mão e molho de seis horas.</span></p>
-                    <p class="cap"><span>Reserva pelo direct antes que acabe!</span></p>
+                      <p class="cap"><span>Domingo é dia de lasanha da nonna.</span></p>
+                      <p class="cap"><span>Massa aberta à mão e molho de seis horas.</span></p>
+                      <p class="cap"><span>Reserva pelo direct antes que acabe!</span></p>
                   </div>
+                  <div class="reel-render" aria-hidden="true"><span>gerando vídeo</span></div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Serviços -->
-          <div role="tabpanel" id="painel-servicos" aria-labelledby="tab-servicos" tabindex="0"
-            class="card mt-4 grid overflow-hidden md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]" data-panel>
-            <div class="border-b border-line md:border-b-0 md:border-r">
-              <div class="pane-head"><span class="mono text-faint">o que você escreve</span></div>
-              <pre class="prompt-code"><span class="dim">Personagem:</span> <b>Ernesto</b>, topete enrolado, terno
-azul-claro e laço preto.
-
-<span class="dim">Cena:</span> quadro de luz de uma casa, com uma
-lanterna acesa na mão.
-<span class="dim">Ação:</span> abre o quadro, aponta o disjuntor e fala
-com a câmera em nome da <b>Costa Instalações</b>.
-
-<span class="dim">Formato:</span> vídeo vertical, 15 segundos.
-<span class="dim">Fala:</span> "Disjuntor caindo toda hora? Não é..."</pre>
-            </div>
-            <div class="flex flex-col">
-              <div class="pane-head">
-                <span class="mono text-faint">o vídeo que sai</span>
-                <span class="mono ml-auto text-[0.6875rem] text-faint">Reels, 15 s</span>
+          <div role="tabpanel" id="painel-servicos" aria-labelledby="tab-servicos" tabindex="0" class="demo"
+            data-panel hidden>
+            <div class="slip">
+              <div class="slip-head">
+                <span class="slip-dots" aria-hidden="true"><i></i><i></i><i></i></span>O que você escreve
+                <span class="mono">comando 04</span>
               </div>
-              <div class="grid flex-1 place-items-center p-6 sm:p-8">
+              <dl class="slip-fields">
+                <div class="slip-row">
+                  <dt>Personagem</dt>
+                  <dd><b>Ernesto</b>, topete enrolado, terno azul-claro e laço preto.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Cena</dt>
+                  <dd>quadro de luz de uma casa, com uma lanterna acesa na mão.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Ação</dt>
+                  <dd>abre o quadro, aponta o disjuntor e fala com a câmera em nome da <b>Costa Instalações</b>.</dd>
+                </div>
+                <div class="slip-row">
+                  <dt>Formato</dt>
+                  <dd>vídeo vertical, 15 segundos.</dd>
+                </div>
+                <div class="slip-row is-speech">
+                  <dt>Fala</dt>
+                  <dd class="slip-speech" data-speech><span class="speech-full">“Disjuntor caindo toda hora? Não é…”</span></dd>
+                </div>
+              </dl>
+              <div class="slip-foot">
+                <button type="button" class="btn btn-primary btn-sm" data-generate><svg class="ico size-4"
+                    viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                  </svg>Gerar vídeo</button>
+                <span class="slip-hint">toque para ver de novo</span>
+              </div>
+            </div>
+
+            <div class="flow" aria-hidden="true">
+              <svg class="flow-arrow" viewBox="0 0 100 44">
+                <path d="M4 34C28 8 64 2 92 22" pathLength="1" />
+                <path d="M80 12.5 92.5 22 77 26.5" />
+              </svg>
+            </div>
+
+            <div class="stage">
+              <svg class="stage-burst" viewBox="0 0 100 100" aria-hidden="true">
+                <polygon points="50.0,2.0 58.0,9.8 68.4,5.7 72.8,15.9 83.9,16.1 84.1,27.2 94.3,31.6 90.2,42.0 98.0,50.0 90.2,58.0 94.3,68.4 84.1,72.8 83.9,83.9 72.8,84.1 68.4,94.3 58.0,90.2 50.0,98.0 42.0,90.2 31.6,94.3 27.2,84.1 16.1,83.9 15.9,72.8 5.7,68.4 9.8,58.0 2.0,50.0 9.8,42.0 5.7,31.6 15.9,27.2 16.1,16.1 27.2,15.9 31.6,5.7 42.0,9.8" />
+              </svg>
+              <div class="reel-wrap">
+                <span class="stage-chip">O vídeo que sai</span>
                 <div class="reel" data-reel>
                   <img src="assets/img/cs006-reel.webp" width="360" height="640" loading="lazy" decoding="async"
                     alt="Ernesto, personagem criado com IA para a Costa Instalações">
@@ -446,10 +630,11 @@ com a câmera em nome da <b>Costa Instalações</b>.
                   <span class="reel-tag">Costa Instalações</span>
                   <span class="reel-product">Orçamento<b>grátis</b></span>
                   <div class="reel-captions">
-                    <p class="cap"><span>Disjuntor caindo toda hora? Não é normal.</span></p>
-                    <p class="cap"><span>A gente vai até você e resolve no mesmo dia.</span></p>
-                    <p class="cap"><span>Pede seu orçamento pelo WhatsApp!</span></p>
+                      <p class="cap"><span>Disjuntor caindo toda hora? Não é normal.</span></p>
+                      <p class="cap"><span>A gente vai até você e resolve no mesmo dia.</span></p>
+                      <p class="cap"><span>Pede seu orçamento pelo WhatsApp!</span></p>
                   </div>
+                  <div class="reel-render" aria-hidden="true"><span>gerando vídeo</span></div>
                 </div>
               </div>
             </div>
@@ -459,8 +644,8 @@ com a câmera em nome da <b>Costa Instalações</b>.
     </section>
 
     <!-- 7. Números -->
-    <!-- Substitua pelos números reais do seu curso. -->
-    <section id="numeros" class="proof-bg section section-cut overflow-hidden" aria-label="O curso em números">
+    <!-- Substitua pelos números reais do seu produto. -->
+    <section id="numeros" class="proof-bg section section-cut overflow-hidden" aria-label="Em números">
       <div class="wrap">
         <div class="reveal text-center">
           <p class="label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
@@ -468,182 +653,262 @@ com a câmera em nome da <b>Costa Instalações</b>.
               <path d="M18 17V9" />
               <path d="M13 17V5" />
               <path d="M8 17v-3" />
-            </svg>O curso em números</p>
+            </svg>Em números</p>
           <h2 class="h2 mx-auto mt-5 max-w-3xl">Tudo o que você leva. <span class="text-petrol">Em números.</span></h2>
           <p class="lead mx-auto mt-5">O formato que você vai aprender a fazer: vídeos verticais com um personagem
             hiper-realista falando do seu produto, do seu serviço ou da sua loja.</p>
         </div>
 
         <div class="phones reveal mt-14" style="--d:1">
-            <figure class="phone is-left">
-              <span class="phone-tag">✦ Personagem com IA</span>
-              <div class="phone-screen">
-                <video data-reel-video src="assets/video/reel-1.mp4" poster="assets/video/reel-1.webp" width="540" height="960" muted loop playsinline preload="none" aria-label="Vídeo de exemplo com personagem"></video>
-                <button type="button" class="phone-sound" aria-label="Ativar o som do vídeo" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path class="on" d="M16 9a5 5 0 0 1 0 6"/><path class="on" d="M19.364 18.364a9 9 0 0 0 0-12.728"/><path class="off" d="m22 9-6 6"/><path class="off" d="m16 9 6 6"/></svg></button>
-                <span class="phone-top" aria-hidden="true">Reels</span>
-                <span class="phone-icons" aria-hidden="true">
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><b>489,2 mil</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><b>4.666</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg><b>151,9 mil</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><b>25,9 mil</b></span>
-                </span>
-                <p class="phone-caption"><span class="phone-handle">@jean_philanthrope</span>Double G. Oui<span class="sr-only">. 489,2 mil curtidas, 4.666 comentários, 151,9 mil compartilhamentos e 25,9 mil salvamentos.</span></p>
-              </div>
-            </figure>
-            <figure class="phone is-center">
-              <span class="phone-tag">✦ Personagem com IA</span>
-              <svg class="phone-burst" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50.0,1.0 58.2,13.9 71.3,5.9 73.1,21.1 88.3,19.4 83.3,33.9 97.8,39.1 87.0,50.0 97.8,60.9 83.3,66.1 88.3,80.6 73.1,78.9 71.3,94.1 58.2,86.1 50.0,99.0 41.8,86.1 28.7,94.1 26.9,78.9 11.7,80.6 16.7,66.1 2.2,60.9 13.0,50.0 2.2,39.1 16.7,33.9 11.7,19.4 26.9,21.1 28.7,5.9 41.8,13.9" /><text x="50" y="47" text-anchor="middle">até</text><text x="50" y="66" text-anchor="middle" class="big">4K</text></svg>
-              <div class="phone-screen">
-                <video data-reel-video src="assets/video/reel-2.mp4" poster="assets/video/reel-2.webp" width="540" height="960" muted loop playsinline preload="none" aria-label="Vídeo de exemplo com personagem"></video>
-                <button type="button" class="phone-sound" aria-label="Ativar o som do vídeo" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path class="on" d="M16 9a5 5 0 0 1 0 6"/><path class="on" d="M19.364 18.364a9 9 0 0 0 0-12.728"/><path class="off" d="m22 9-6 6"/><path class="off" d="m16 9 6 6"/></svg></button>
-                <span class="phone-top" aria-hidden="true">Reels</span>
-                <span class="phone-icons" aria-hidden="true">
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><b>182,1 mil</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><b>3.185</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg><b>85,5 mil</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><b>12,6 mil</b></span>
-                </span>
-                <p class="phone-caption"><span class="phone-handle">@jean_philanthrope</span>Elle m’appelle le soir, elle t’appelle bout d’chou<span class="sr-only">. 182,1 mil curtidas, 3.185 comentários, 85,5 mil compartilhamentos e 12,6 mil salvamentos.</span></p>
-              </div>
-            </figure>
-            <figure class="phone is-right">
-              <span class="phone-tag">✦ Personagem com IA</span>
-              <div class="phone-screen">
-                <video data-reel-video src="assets/video/reel-3.mp4" poster="assets/video/reel-3.webp" width="540" height="960" muted loop playsinline preload="none" aria-label="Vídeo de exemplo com personagem"></video>
-                <button type="button" class="phone-sound" aria-label="Ativar o som do vídeo" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path class="on" d="M16 9a5 5 0 0 1 0 6"/><path class="on" d="M19.364 18.364a9 9 0 0 0 0-12.728"/><path class="off" d="m22 9-6 6"/><path class="off" d="m16 9 6 6"/></svg></button>
-                <span class="phone-top" aria-hidden="true">Reels</span>
-                <span class="phone-icons" aria-hidden="true">
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><b>613,9 mil</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg><b>4.488</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg><b>159,3 mil</b></span>
-                  <span class="phone-stat"><svg viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg><b>27,5 mil</b></span>
-                </span>
-                <p class="phone-caption"><span class="phone-handle">@jean_philanthrope</span>Do you always dress this sharp? Oui Madame.<span class="sr-only">. 613,9 mil curtidas, 4.488 comentários, 159,3 mil compartilhamentos e 27,5 mil salvamentos.</span></p>
-              </div>
-            </figure>
+          <figure class="phone is-left">
+            <span class="phone-tag">✦ Personagem com IA</span>
+            <div class="phone-screen">
+              <video data-reel-video src="assets/video/reel-1.mp4" poster="assets/video/reel-1.webp" width="540"
+                height="960" muted loop playsinline preload="none" aria-label="Vídeo de exemplo com personagem"></video>
+              <button type="button" class="phone-sound" aria-label="Ativar o som do vídeo" aria-pressed="false"><svg
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+                  <path class="on" d="M16 9a5 5 0 0 1 0 6" />
+                  <path class="on" d="M19.364 18.364a9 9 0 0 0 0-12.728" />
+                  <path class="off" d="m22 9-6 6" />
+                  <path class="off" d="m16 9 6 6" />
+                </svg></button>
+              <span class="phone-top" aria-hidden="true">Reels</span>
+              <span class="phone-icons" aria-hidden="true">
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  </svg><b>489,2 mil</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                  </svg><b>4.666</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+                    <path d="m21.854 2.147-10.94 10.939" />
+                  </svg><b>151,9 mil</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                  </svg><b>25,9 mil</b></span>
+              </span>
+              <p class="phone-caption"><span class="phone-handle">@jean_philanthrope</span>Double G. Oui<span
+                  class="sr-only">. 489,2 mil curtidas, 4.666 comentários, 151,9 mil compartilhamentos e 25,9 mil
+                  salvamentos.</span></p>
+            </div>
+          </figure>
+          <figure class="phone is-center">
+            <span class="phone-tag">✦ Personagem com IA</span>
+            <svg class="phone-burst" viewBox="0 0 100 100" aria-hidden="true">
+              <polygon
+                points="50.0,1.0 58.2,13.9 71.3,5.9 73.1,21.1 88.3,19.4 83.3,33.9 97.8,39.1 87.0,50.0 97.8,60.9 83.3,66.1 88.3,80.6 73.1,78.9 71.3,94.1 58.2,86.1 50.0,99.0 41.8,86.1 28.7,94.1 26.9,78.9 11.7,80.6 16.7,66.1 2.2,60.9 13.0,50.0 2.2,39.1 16.7,33.9 11.7,19.4 26.9,21.1 28.7,5.9 41.8,13.9" />
+              <text x="50" y="47" text-anchor="middle">até</text><text x="50" y="66" text-anchor="middle"
+                class="big">4K</text>
+            </svg>
+            <div class="phone-screen">
+              <video data-reel-video src="assets/video/reel-2.mp4" poster="assets/video/reel-2.webp" width="540"
+                height="960" muted loop playsinline preload="none" aria-label="Vídeo de exemplo com personagem"></video>
+              <button type="button" class="phone-sound" aria-label="Ativar o som do vídeo" aria-pressed="false"><svg
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+                  <path class="on" d="M16 9a5 5 0 0 1 0 6" />
+                  <path class="on" d="M19.364 18.364a9 9 0 0 0 0-12.728" />
+                  <path class="off" d="m22 9-6 6" />
+                  <path class="off" d="m16 9 6 6" />
+                </svg></button>
+              <span class="phone-top" aria-hidden="true">Reels</span>
+              <span class="phone-icons" aria-hidden="true">
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  </svg><b>182,1 mil</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                  </svg><b>3.185</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+                    <path d="m21.854 2.147-10.94 10.939" />
+                  </svg><b>85,5 mil</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                  </svg><b>12,6 mil</b></span>
+              </span>
+              <p class="phone-caption"><span class="phone-handle">@jean_philanthrope</span>Elle m’appelle le soir, elle
+                t’appelle bout d’chou<span class="sr-only">. 182,1 mil curtidas, 3.185 comentários, 85,5 mil
+                  compartilhamentos e 12,6 mil salvamentos.</span></p>
+            </div>
+          </figure>
+          <figure class="phone is-right">
+            <span class="phone-tag">✦ Personagem com IA</span>
+            <div class="phone-screen">
+              <video data-reel-video src="assets/video/reel-3.mp4" poster="assets/video/reel-3.webp" width="540"
+                height="960" muted loop playsinline preload="none" aria-label="Vídeo de exemplo com personagem"></video>
+              <button type="button" class="phone-sound" aria-label="Ativar o som do vídeo" aria-pressed="false"><svg
+                  viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+                  <path class="on" d="M16 9a5 5 0 0 1 0 6" />
+                  <path class="on" d="M19.364 18.364a9 9 0 0 0 0-12.728" />
+                  <path class="off" d="m22 9-6 6" />
+                  <path class="off" d="m16 9 6 6" />
+                </svg></button>
+              <span class="phone-top" aria-hidden="true">Reels</span>
+              <span class="phone-icons" aria-hidden="true">
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  </svg><b>613,9 mil</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                  </svg><b>4.488</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+                    <path d="m21.854 2.147-10.94 10.939" />
+                  </svg><b>159,3 mil</b></span>
+                <span class="phone-stat"><svg viewBox="0 0 24 24">
+                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                  </svg><b>27,5 mil</b></span>
+              </span>
+              <p class="phone-caption"><span class="phone-handle">@jean_philanthrope</span>Do you always dress this
+                sharp? Oui Madame.<span class="sr-only">. 613,9 mil curtidas, 4.488 comentários, 159,3 mil
+                  compartilhamentos e 27,5 mil salvamentos.</span></p>
+            </div>
+          </figure>
         </div>
-        <p class="mono mt-5 text-center text-[0.75rem] text-faint"><span class="sm:hidden">← deslize → · </span>Toque no vídeo para ouvir</p>
+        <p class="mono mt-5 text-center text-[0.75rem] text-faint"><span class="sm:hidden">← deslize → · </span>Toque no
+          vídeo para ouvir</p>
 
         <dl class="stat-row mt-10">
-          <div class="stat-card reveal" style="--d:0">
+          <div class="stat-card reveal" style="--d:0" data-tilt>
             <dt class="stat-label">roteiros de anúncio prontos</dt>
             <dd class="stat-num"><span data-count="60">60</span>+</dd>
           </div>
-          <div class="stat-card reveal" style="--d:1">
-            <dt class="stat-label">aulas curtas e práticas</dt>
-            <dd class="stat-num"><span data-count="42">42</span></dd>
+          <div class="stat-card reveal" style="--d:1" data-tilt>
+            <dt class="stat-label">bônus inclusos no acesso</dt>
+            <dd class="stat-num"><span data-count="3">3</span></dd>
           </div>
-          <div class="stat-card reveal" style="--d:2">
+          <div class="stat-card reveal" style="--d:2" data-tilt>
             <dt class="stat-label">de resolução nos vídeos</dt>
             <dd class="stat-num">até <span data-count="4">4</span>K</dd>
           </div>
-          <div class="stat-card reveal" style="--d:3">
+          <div class="stat-card reveal" style="--d:3" data-tilt>
             <dt class="stat-label">de garantia incondicional</dt>
             <dd class="stat-num"><span data-count="7">7</span> dias</dd>
           </div>
         </dl>
 
         <p class="reveal mt-8 text-center text-[1.0625rem] font-bold italic">E tudo isso num acesso só.</p>
-        <p class="mx-auto mt-3 max-w-xl text-center text-[0.75rem] text-faint">Vídeos de exemplo do formato, com crédito a quem fez. Números de 08/10/2026. Não são resultados de alunos.</p>
+        <p class="mx-auto mt-3 max-w-xl text-center text-[0.75rem] text-faint">Vídeos de exemplo do formato, com crédito
+          a quem fez. Números de 08/10/2026. Não são resultados de alunos.</p>
       </div>
     </section>
 
-    <!-- 8. /conteúdo -->
+    <!-- 8. /conteúdo: o que vem na videoaula e no PDF.
+         As etapas abaixo são um roteiro provisório: ajuste ao que a aula mostra de fato. -->
     <section id="conteudo" class="section bg-cream">
       <div class="wrap">
         <div class="reveal text-center">
           <p class="label"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
               <path d="M10 8l6 4-6 4Z" />
-            </svg>Conteúdo do curso</p>
-          <h2 class="h2 mx-auto mt-5 max-w-3xl">Sete módulos, <span class="swoosh">do primeiro personagem ao vídeo publicado.</span></h2>
-          <p class="lead mx-auto mt-6">Aulas curtas e direto ao ponto. Você cria o personagem do seu negócio enquanto assiste.</p>
+            </svg>O que tem dentro</p>
+          <h2 class="h2 mx-auto mt-5 max-w-3xl">Uma videoaula prática, <span class="swoosh">do zero ao personagem
+              pronto.</span></h2>
+          <p class="lead mx-auto mt-6">Você assiste e monta o seu personagem junto, etapa por etapa. E o PDF explica
+            tudo por escrito, para você consultar depois.</p>
         </div>
+      </div>
 
-        <ol class="steps mt-14">
-          <li class="step-card is-sky reveal" style="--d:0">
-            <span class="step-num" aria-hidden="true">1</span>
-            <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg></div>
-            <p class="step-kicker">Módulo 01 · 5 aulas, 34 min</p>
-            <h3 class="step-title">Primeiros passos com IA de imagem e vídeo</h3>
-            <ul class="step-list">
-              <li>O que já dá para fazer com IA de imagem e vídeo</li>
-              <li>As ferramentas gratuitas e quando vale pagar</li>
-              <li>Criando suas contas, passo a passo</li>
-              <li>Seu primeiro personagem em 15 minutos</li>
-            </ul>
-          </li>
-          <li class="step-card is-cream reveal" style="--d:1">
-            <span class="step-num" aria-hidden="true">2</span>
-            <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
-            <p class="step-kicker">Módulo 02 · 6 aulas, 48 min</p>
-            <h3 class="step-title">Criando o personagem da sua marca</h3>
-            <ul class="step-list">
-              <li>Rosto, idade, estilo e figurino</li>
-              <li>O mesmo rosto em todas as cenas</li>
-              <li>Expressões e poses que chamam atenção</li>
-              <li>Um personagem com a cara do seu negócio</li>
-            </ul>
-          </li>
-          <li class="step-card is-peach reveal" style="--d:2">
-            <span class="step-num" aria-hidden="true">3</span>
-            <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-            <p class="step-kicker">Módulo 03 · 6 aulas, 51 min</p>
-            <h3 class="step-title">O seu produto em cena</h3>
-            <ul class="step-list">
-              <li>Fotografando o produto para a IA usar</li>
-              <li>O personagem segurando, vestindo ou usando o produto</li>
-              <li>Cenários: provador, balcão, consultório e cozinha</li>
-              <li>Fotos para feed, stories e catálogo</li>
-            </ul>
-          </li>
-          <li class="step-card is-mint reveal" style="--d:3">
-            <span class="step-num" aria-hidden="true">4</span>
-            <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg></div>
-            <p class="step-kicker">Módulo 04 · 8 aulas, 72 min</p>
-            <h3 class="step-title">Voz e movimento</h3>
-            <ul class="step-list">
-              <li>Do retrato ao vídeo, com movimento natural</li>
-              <li>Uma voz em português para o seu personagem</li>
-              <li>Boca sincronizada com a fala</li>
-              <li>Vídeos verticais de 15 a 60 segundos</li>
-            </ul>
-          </li>
-          <li class="step-card is-sky reveal" style="--d:0">
-            <span class="step-num" aria-hidden="true">5</span>
-            <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M13 8H7"/><path d="M17 12H7"/></svg></div>
-            <p class="step-kicker">Módulo 05 · 6 aulas, 46 min</p>
-            <h3 class="step-title">Roteiros que vendem</h3>
-            <ul class="step-list">
-              <li>Ganchos para os primeiros 3 segundos</li>
-              <li>Falas que mostram o produto sem parecer propaganda chata</li>
-              <li>Chamadas para ação que levam ao seu WhatsApp</li>
-            </ul>
-          </li>
-          <li class="step-card is-cream reveal" style="--d:1">
-            <span class="step-num" aria-hidden="true">6</span>
-            <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg></div>
-            <p class="step-kicker">Módulo 06 · 6 aulas, 49 min</p>
-            <h3 class="step-title">Publicar e anunciar</h3>
-            <ul class="step-list">
-              <li>Edição rápida no celular</li>
-              <li>Reels, Stories e TikTok: formatos e legendas</li>
-              <li>Usando os vídeos em anúncios pagos</li>
-            </ul>
-          </li>
-          <li class="step-card is-peach reveal" style="--d:2">
-            <span class="step-num" aria-hidden="true">7</span>
-            <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
-            <p class="step-kicker">Módulo 07 · 5 aulas, 38 min</p>
-            <h3 class="step-title">IA com responsabilidade</h3>
-            <ul class="step-list">
-              <li>Direito de imagem: por que nunca usar o rosto de pessoas reais</li>
-              <li>Quando e como avisar que o conteúdo foi feito com IA</li>
-              <li>As regras de cada plataforma</li>
-              <li>Seus próximos passos</li>
-            </ul>
-          </li>
-        </ol>
+      <!-- no desktop a seção fica parada e as etapas passam da direita para a esquerda -->
+      <div class="hs mt-14" data-hscroll>
+        <div class="hs-sticky">
+          <div class="hs-track wrap" data-hscroll-track>
+            <ol class="steps">
+              <li class="step-card is-sky reveal" style="--d:0" data-tilt>
+                <span class="step-num" aria-hidden="true">1</span>
+                <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                    <path
+                      d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+                  </svg></div>
+                <p class="step-kicker">Etapa 01 · na videoaula</p>
+                <h3 class="step-title">As ferramentas certas</h3>
+                <ul class="step-list">
+                  <li>Quais ferramentas de IA usar, e para quê</li>
+                  <li>As versões gratuitas e quando vale pagar</li>
+                  <li>Criando as suas contas, passo a passo</li>
+                </ul>
+              </li>
+              <li class="step-card is-cream reveal" style="--d:1" data-tilt>
+                <span class="step-num" aria-hidden="true">2</span>
+                <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="5" />
+                    <path d="M20 21a8 8 0 0 0-16 0" />
+                  </svg></div>
+                <p class="step-kicker">Etapa 02 · na videoaula</p>
+                <h3 class="step-title">O rosto do seu personagem</h3>
+                <ul class="step-list">
+                  <li>Rosto, idade, estilo e figurino</li>
+                  <li>Expressões e poses que chamam atenção</li>
+                  <li>Um personagem com a cara do seu negócio</li>
+                </ul>
+              </li>
+              <li class="step-card is-peach reveal" style="--d:2" data-tilt>
+                <span class="step-num" aria-hidden="true">3</span>
+                <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                    <path d="M3 6h18" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                  </svg></div>
+                <p class="step-kicker">Etapa 03 · na videoaula</p>
+                <h3 class="step-title">O mesmo rosto, com o seu produto</h3>
+                <ul class="step-list">
+                  <li>O mesmo rosto em todas as cenas</li>
+                  <li>Segurando, vestindo ou usando o seu produto</li>
+                  <li>No cenário certo para o seu negócio</li>
+                </ul>
+              </li>
+              <li class="step-card is-mint reveal" style="--d:3" data-tilt>
+                <span class="step-num" aria-hidden="true">4</span>
+                <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <path d="M12 19v3" />
+                  </svg></div>
+                <p class="step-kicker">Etapa 04 · na videoaula</p>
+                <h3 class="step-title">Voz e movimento</h3>
+                <ul class="step-list">
+                  <li>Do retrato ao vídeo, com movimento natural</li>
+                  <li>Uma voz em português para o personagem</li>
+                  <li>Boca sincronizada com a fala</li>
+                </ul>
+              </li>
+            </ol>
+
+            <!-- o PDF que acompanha a aula -->
+            <article class="pdf-card reveal" style="--d:1" data-tilt>
+              <div class="step-art" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M10 9H8" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </svg></div>
+              <div>
+                <p class="step-kicker">Junto com a aula · material em PDF</p>
+                <h3 class="step-title">Todo o passo a passo, explicado por escrito</h3>
+                <p class="pdf-text">Cada etapa da videoaula no papel, para você consultar quando quiser, sem precisar voltar o
+                  vídeo.</p>
+              </div>
+            </article>
+          </div>
+          <div class="hs-bar wrap" aria-hidden="true">
+            <span class="hs-hint">role para passar as etapas</span>
+            <span class="hs-line"><i data-hscroll-bar></i></span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -662,31 +927,58 @@ com a câmera em nome da <b>Costa Instalações</b>.
         </div>
 
         <div class="mx-auto mt-14 grid max-w-[60rem] gap-x-6 gap-y-10 md:grid-cols-2">
-          <article class="pick-card is-mint reveal" style="--d:0">
+          <article class="pick-card is-mint reveal" style="--d:0" data-tilt>
             <span class="stamp is-green">Incluso</span>
             <h3 class="pick-title">O que vem junto…</h3>
             <ul class="pick-list">
-              <li><span class="tick" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span><strong>Biblioteca de prompts de personagens</strong> Rostos, estilos, figurinos e expressões prontos para usar. <s>R$ 197</s> <em>incluso</em></span></li>
-              <li><span class="tick" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span><strong>60+ roteiros de anúncio</strong> Para loja, clínica, restaurante, beleza e serviços. <s>R$ 297</s> <em>incluso</em></span></li>
-              <li><span class="tick" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span><strong>Pacote de cenários prontos</strong> Provador, balcão, consultório, cozinha e oficina. <s>R$ 97</s> <em>incluso</em></span></li>
+              <li><span class="tick" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg></span><span><strong>Biblioteca de prompts de personagens</strong> Rostos, estilos, figurinos e
+                  expressões prontos para usar. <s>R$ 19,80</s> <em>incluso</em></span></li>
+              <li><span class="tick" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg></span><span><strong>60+ roteiros de anúncio</strong> Para loja, clínica, restaurante, beleza e
+                  serviços. <s>R$ 297</s> <em>incluso</em></span></li>
+              <li><span class="tick" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24">
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg></span><span><strong>Pacote de cenários prontos</strong> Provador, balcão, consultório, cozinha
+                  e oficina. <s>R$ 97</s> <em>incluso</em></span></li>
             </ul>
           </article>
 
-          <article class="pick-card is-sand reveal" style="--d:1">
+          <article class="pick-card is-sand reveal" style="--d:1" data-tilt>
             <span class="stamp is-rust">Sem começar do zero</span>
             <h3 class="pick-title">Com eles você vai…</h3>
             <ul class="pick-list">
-              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z"/></svg></span><span>Criar personagens que mantêm o mesmo rosto em todas as cenas</span></li>
-              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z"/></svg></span><span>Ter ganchos, falas e chamadas para ação prontos para o seu tipo de negócio</span></li>
-              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z"/></svg></span><span>Trocar só o nome do produto e já ter o roteiro do anúncio</span></li>
-              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z"/></svg></span><span>Colocar o seu personagem em cena no provador, no balcão, no consultório, na cozinha ou na oficina</span></li>
-              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z"/></svg></span><span>Começar sem partir do zero, com tudo no mesmo acesso</span></li>
+              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z" />
+                  </svg></span><span>Criar personagens que mantêm o mesmo rosto em todas as cenas</span></li>
+              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z" />
+                  </svg></span><span>Ter ganchos, falas e chamadas para ação prontos para o seu tipo de negócio</span>
+              </li>
+              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z" />
+                  </svg></span><span>Trocar só o nome do produto e já ter o roteiro do anúncio</span></li>
+              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z" />
+                  </svg></span><span>Colocar o seu personagem em cena no provador, no balcão, no consultório, na cozinha
+                  ou na oficina</span></li>
+              <li><span class="tick is-spark" aria-hidden="true"><svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 1c.9 6.4 3.6 9.1 10 10-6.4.9-9.1 3.6-10 10-.9-6.4-3.6-9.1-10-10 6.4-.9 9.1-3.6 10-10Z" />
+                  </svg></span><span>Começar sem partir do zero, com tudo no mesmo acesso</span></li>
             </ul>
           </article>
         </div>
 
         <div class="reveal mt-12 text-center">
-          <a href="#oferta" data-checkout class="btn btn-primary">Garantir meu acesso <span aria-hidden="true">→</span></a>
+          <a href="#oferta" data-checkout class="btn btn-primary">Garantir meu acesso <span
+              aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
@@ -708,7 +1000,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
         </div>
 
         <div class="mt-14 grid gap-x-5 gap-y-9 md:grid-cols-3">
-          <figure class="card testi reveal" style="--d:0">
+          <figure class="card testi glow reveal" style="--d:0" data-tilt>
             <span class="testi-tag is-rust">5 dias de uso</span>
             <figcaption class="flex items-center gap-3">
               <img class="avatar" src="assets/img/pompadour-avatar.webp" width="160" height="160" alt="" loading="lazy"
@@ -726,7 +1018,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
                 class="font-normal text-faint">foto ilustrativa criada por aluno</span></p>
           </figure>
 
-          <figure class="card testi reveal" style="--d:1">
+          <figure class="card testi glow reveal" style="--d:1" data-tilt>
             <span class="testi-tag is-mist">3 dias de uso</span>
             <figcaption class="flex items-center gap-3">
               <img class="avatar" src="assets/img/elegancia-avatar.webp" width="160" height="160" alt="" loading="lazy"
@@ -744,7 +1036,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
                 class="font-normal text-faint">foto ilustrativa criada por aluno</span></p>
           </figure>
 
-          <figure class="card testi reveal" style="--d:2">
+          <figure class="card testi glow reveal" style="--d:2" data-tilt>
             <span class="testi-tag is-mustard">Segunda Semana</span>
             <figcaption class="flex items-center gap-3">
               <img class="avatar" src="assets/img/cavalheiro-avatar.webp" width="160" height="160" alt="" loading="lazy"
@@ -765,7 +1057,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
       </div>
     </section>
 
-    <!-- 11. /oferta: o "ingresso" do curso -->
+    <!-- 11. /oferta: o "ingresso" do produto -->
     <section id="oferta" class="sky sky-2 sky-fade section relative overflow-hidden">
       <div
         class="pointer-events-none absolute inset-x-0 top-0 h-[36rem] bg-[radial-gradient(ellipse_50%_60%_at_50%_30%,rgb(255_255_255/0.55),transparent_70%)]"
@@ -777,11 +1069,11 @@ com a câmera em nome da <b>Costa Instalações</b>.
                 d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
               <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
             </svg>Oferta de lançamento</p>
-          <h2 class="h2 mx-auto mt-5 max-w-3xl">Curso, prompts e roteiros. <span class="sticker-text block">Tudo num
+          <h2 class="h2 mx-auto mt-5 max-w-3xl">Videoaula, PDF e roteiros. <span class="sticker-text block">Tudo num
               acesso só.</span></h2>
-          <!-- Preço: substitua pelos valores reais aqui, no ingresso e no CTA fixo do celular -->
-          <p class="lead mx-auto mt-5">Aprenda a criar o seu personagem, acompanhe as aulas passo a passo e use os
-            prompts e roteiros prontos. Tudo por <strong class="font-semibold text-fg">R$ 197</strong> em pagamento
+          <!-- Preço: se mudar, troque aqui, no ingresso, nos botões e no CTA fixo do celular -->
+          <p class="lead mx-auto mt-5">Monte o seu personagem junto com a videoaula, consulte o PDF quando precisar e
+            use os prompts e roteiros prontos. Tudo por <strong class="font-semibold text-fg">R$ 19,80</strong> em pagamento
             único, com os três bônus inclusos.</p>
         </div>
 
@@ -793,32 +1085,31 @@ com a câmera em nome da <b>Costa Instalações</b>.
             <text x="50" y="61" text-anchor="middle">LANÇAMENTO</text>
           </svg>
 
-          <p class="ticket-head">Acesso completo: curso, prompts e roteiros</p>
+          <p class="ticket-head">Acesso completo: videoaula, PDF e bônus</p>
 
           <div class="ticket-body">
             <div class="flex items-center gap-4">
               <img class="ticket-avatar" src="assets/img/cs003-256.webp" width="256" height="320" alt="" loading="lazy"
                 decoding="async">
               <div>
-                <h3 class="ticket-title">Curso IA no Balcão</h3>
-                <p class="mt-1.5 text-[0.875rem] leading-snug text-muted">O passo a passo para criar o personagem que
-                  divulga o seu negócio.</p>
+                <h3 class="ticket-title">IA no Balcão</h3>
+                <p class="mt-1.5 text-[0.875rem] leading-snug text-muted">A videoaula prática para montar o personagem
+                  que divulga o seu negócio.</p>
               </div>
             </div>
 
             <div class="mt-7 flex items-end gap-3">
-              <p class="ticket-price"><span class="cur">R$</span>197</p>
-              <p class="pb-1.5 text-[0.8125rem] leading-snug text-muted">de <s>R$ 497</s> à vista<br>ou 12x de R$ 20,37
-              </p>
+              <p class="ticket-price"><span class="cur">R$</span>19,80</p>
+              <p class="pb-1.5 text-[0.8125rem] leading-snug text-muted">à vista<br>ou 5x de R$ 3,96</p>
             </div>
 
             <ul class="mt-7 space-y-3 text-[0.9375rem]">
               <li class="flex gap-3"><span class="check"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20 6 9 17l-5-5" />
-                  </svg></span>Curso completo: 7 módulos e 42 aulas em vídeo</li>
+                  </svg></span>Videoaula prática de montagem do personagem</li>
               <li class="flex gap-3"><span class="check"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20 6 9 17l-5-5" />
-                  </svg></span>O personagem do seu negócio, criado com você passo a passo</li>
+                  </svg></span>Material em PDF com todo o passo a passo explicado</li>
               <li class="flex gap-3"><span class="check"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20 6 9 17l-5-5" />
                   </svg></span>Biblioteca de prompts de personagens</li>
@@ -836,7 +1127,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
                   </svg></span>Garantia incondicional de 7 dias</li>
             </ul>
 
-            <a href="#oferta" data-checkout class="btn btn-primary btn-lg mt-8">Garantir meu acesso por R$ 197</a>
+            <a href="#oferta" data-checkout class="btn btn-primary btn-lg mt-8">Garantir meu acesso por R$ 19,80</a>
           </div>
 
           <div class="ticket-stub" aria-hidden="true">
@@ -874,7 +1165,8 @@ com a câmera em nome da <b>Costa Instalações</b>.
       <div class="wrap">
         <div class="guarantee reveal mx-auto max-w-[54rem]">
           <svg class="guarantee-seal" viewBox="0 0 100 100" role="img" aria-label="Selo: 7 dias de garantia">
-            <polygon points="50.0,1.0 58.2,13.9 71.3,5.9 73.1,21.1 88.3,19.4 83.3,33.9 97.8,39.1 87.0,50.0 97.8,60.9 83.3,66.1 88.3,80.6 73.1,78.9 71.3,94.1 58.2,86.1 50.0,99.0 41.8,86.1 28.7,94.1 26.9,78.9 11.7,80.6 16.7,66.1 2.2,60.9 13.0,50.0 2.2,39.1 16.7,33.9 11.7,19.4 26.9,21.1 28.7,5.9 41.8,13.9" />
+            <polygon
+              points="50.0,1.0 58.2,13.9 71.3,5.9 73.1,21.1 88.3,19.4 83.3,33.9 97.8,39.1 87.0,50.0 97.8,60.9 83.3,66.1 88.3,80.6 73.1,78.9 71.3,94.1 58.2,86.1 50.0,99.0 41.8,86.1 28.7,94.1 26.9,78.9 11.7,80.6 16.7,66.1 2.2,60.9 13.0,50.0 2.2,39.1 16.7,33.9 11.7,19.4 26.9,21.1 28.7,5.9 41.8,13.9" />
             <text class="seal-num" x="50" y="58" text-anchor="middle">7</text>
             <text class="seal-cap" x="50" y="70" text-anchor="middle">DIAS DE GARANTIA</text>
           </svg>
@@ -882,8 +1174,8 @@ com a câmera em nome da <b>Costa Instalações</b>.
             <p class="guarantee-kicker">Garantia incondicional de 7 dias</p>
             <h2 class="guarantee-title">Teste por 7 dias.</h2>
             <p class="guarantee-sub">Se não for para você, devolvemos tudo.</p>
-            <p class="guarantee-text">Entre, assista às aulas e crie o seu primeiro personagem. Se em até 7 dias você achar
-              que o curso não serve para o seu negócio, mande um e-mail e devolvemos 100% do valor. Sem perguntas e sem
+            <p class="guarantee-text">Entre, assista à videoaula e crie o seu primeiro personagem. Se em até 7 dias você
+              achar que o material não serve para o seu negócio, mande um e-mail e devolvemos 100% do valor. Sem perguntas e sem
               burocracia.</p>
           </div>
         </div>
@@ -913,7 +1205,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
               </svg></summary>
             <div class="acc-body">
               <p class="px-5 pb-6 text-muted sm:px-7">Não. Você escreve em português o que quer ver e a IA cria. A
-                edição é feita no celular, com aplicativos gratuitos, e o curso mostra tudo passo a passo.</p>
+                edição é feita no celular, com aplicativos gratuitos, e a videoaula mostra tudo passo a passo.</p>
             </div>
           </details>
           <details class="acc" name="faq">
@@ -924,7 +1216,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
               </svg></summary>
             <div class="acc-body">
               <p class="px-5 pb-6 text-muted sm:px-7">Dá para começar com as versões gratuitas. Para vídeos mais longos
-                ou em alta resolução, alguns planos pagos ajudam. O curso mostra as opções e quanto cada uma custa, para
+                ou em alta resolução, alguns planos pagos ajudam. A videoaula mostra as opções e quanto cada uma custa, para
                 você decidir com calma.</p>
             </div>
           </details>
@@ -936,8 +1228,8 @@ com a câmera em nome da <b>Costa Instalações</b>.
               </svg></summary>
             <div class="acc-body">
               <p class="px-5 pb-6 text-muted sm:px-7">Pode. O personagem é criado por você, sem usar o rosto de pessoas
-                reais, e o curso mostra as regras de cada plataforma, incluindo quando marcar o conteúdo como feito com
-                IA.</p>
+                reais. Só siga as regras de cada plataforma, como marcar o conteúdo como feito com IA quando ela
+                pedir.</p>
             </div>
           </details>
           <details class="acc" name="faq">
@@ -958,8 +1250,8 @@ com a câmera em nome da <b>Costa Instalações</b>.
                 <path d="M12 5v14" />
               </svg></summary>
             <div class="acc-body">
-              <p class="px-5 pb-6 text-muted sm:px-7">Sim. As aulas e a maior parte das ferramentas funcionam no
-                celular. Para gerar vídeos mais longos o computador ajuda, mas não é obrigatório.</p>
+              <p class="px-5 pb-6 text-muted sm:px-7">Sim. A videoaula, o PDF e a maior parte das ferramentas funcionam
+                no celular. Para gerar vídeos mais longos o computador ajuda, mas não é obrigatório.</p>
             </div>
           </details>
           <details class="acc" name="faq">
@@ -969,8 +1261,8 @@ com a câmera em nome da <b>Costa Instalações</b>.
                 <path d="M12 5v14" />
               </svg></summary>
             <div class="acc-body">
-              <p class="px-5 pb-6 text-muted sm:px-7">Por 1 ano a partir da compra, com todas as atualizações das aulas
-                nesse período. Quando as ferramentas mudam, as aulas mudam junto.</p>
+              <p class="px-5 pb-6 text-muted sm:px-7">Por 1 ano a partir da compra, com todas as atualizações nesse
+                período. Quando as ferramentas mudam, a aula e o PDF mudam junto.</p>
             </div>
           </details>
           <details class="acc" name="faq">
@@ -992,19 +1284,27 @@ com a câmera em nome da <b>Costa Instalações</b>.
     <section id="cta-final" class="sky sky-3 relative overflow-hidden">
       <div class="wrap relative py-24 text-center md:py-32">
         <div class="cta-stack reveal" aria-hidden="true">
-          <img class="cta-pic is-left" src="assets/img/cs001-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async">
+          <img class="cta-pic is-left" src="assets/img/cs001-256.webp" width="256" height="320" alt="" loading="lazy"
+            decoding="async">
           <div class="cta-open">
             <span class="cta-open-title">Acesso aberto</span>
-            <svg class="cta-open-ghost" viewBox="0 0 100 80"><circle cx="50" cy="30" r="18"/><path d="M14 80c0-22 16-34 36-34s36 12 36 34z"/></svg>
+            <svg class="cta-open-ghost" viewBox="0 0 100 80">
+              <circle cx="50" cy="30" r="18" />
+              <path d="M14 80c0-22 16-34 36-34s36 12 36 34z" />
+            </svg>
           </div>
-          <img class="cta-pic is-right" src="assets/img/cs005-256.webp" width="256" height="320" alt="" loading="lazy" decoding="async">
+          <img class="cta-pic is-right" src="assets/img/cs005-256.webp" width="256" height="320" alt="" loading="lazy"
+            decoding="async">
         </div>
 
-        <h2 class="h2 reveal mx-auto mt-10 max-w-3xl md:text-[4.25rem]" style="--d:1">Comece hoje. <span class="sticker-text is-rust block">Quem vai ser o seu personagem?</span></h2>
-        <p class="lead reveal mx-auto mt-6" style="--d:2">Ele pode estar divulgando a sua loja ainda esta semana: no Instagram, no WhatsApp e nos seus anúncios, sem você precisar aparecer.</p>
+        <h2 class="h2 reveal mx-auto mt-10 max-w-3xl md:text-[4.25rem]" style="--d:1">Comece hoje. <span
+            class="sticker-text is-rust block">Quem vai ser o seu personagem?</span></h2>
+        <p class="lead reveal mx-auto mt-6" style="--d:2">Ele pode estar divulgando a sua loja ainda esta semana: no
+          Instagram, no WhatsApp e nos seus anúncios, sem você precisar aparecer.</p>
         <div class="reveal mt-9" style="--d:3">
           <a href="#oferta" data-checkout
-            class="btn btn-primary w-full sm:w-auto sm:min-w-[16rem] min-h-[3.5rem] text-[1.0625rem]">Criar meu personagem <span aria-hidden="true">→</span></a>
+            class="btn btn-primary w-full sm:w-auto sm:min-w-[16rem] min-h-[3.5rem] text-[1.0625rem]">Criar meu
+            personagem <span aria-hidden="true">→</span></a>
           <ul class="cta-chips mt-5">
             <li>Acesso imediato</li>
             <li>Garantia de 7 dias</li>
@@ -1016,7 +1316,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
   </main>
 
   <!-- 15. Rodapé -->
-  <footer class="footer-wave on-dark bg-ink pb-28 md:pb-0">
+  <footer class="on-dark bg-ink pb-28 md:pb-0">
 
     <div class="wrap grid gap-10 py-14 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1fr)] md:gap-12 md:py-16">
       <div>
@@ -1035,7 +1335,7 @@ com a câmera em nome da <b>Costa Instalações</b>.
         <ul class="mt-5 space-y-3">
           <li><a class="footer-link text-fg hover:text-mustard" href="#criar">O que você vai criar</a></li>
           <li><a class="footer-link text-fg hover:text-mustard" href="#pratica">Na prática</a></li>
-          <li><a class="footer-link text-fg hover:text-mustard" href="#conteudo">Conteúdo do curso</a></li>
+          <li><a class="footer-link text-fg hover:text-mustard" href="#conteudo">O que tem dentro</a></li>
           <li><a class="footer-link text-fg hover:text-mustard" href="#oferta">Oferta</a></li>
           <li><a class="footer-link text-fg hover:text-mustard" href="#faq">Perguntas frequentes</a></li>
         </ul>
@@ -1075,9 +1375,9 @@ com a câmera em nome da <b>Costa Instalações</b>.
   <div class="on-dark sticky-cta" data-sticky-cta>
     <div class="flex items-center justify-between gap-3">
       <p class="leading-tight">
-        <span class="block font-semibold">R$ 197 <span class="text-[0.8125rem] font-normal text-muted">à
+        <span class="block font-semibold">R$ 19,80 <span class="text-[0.8125rem] font-normal text-muted">à
             vista</span></span>
-        <span class="block text-[0.75rem] text-muted">ou 12x de R$ 20,37</span>
+        <span class="block text-[0.75rem] text-muted">ou 5x de R$ 3,96</span>
       </p>
       <a href="#oferta" data-checkout class="btn btn-primary">Garantir meu acesso</a>
     </div>

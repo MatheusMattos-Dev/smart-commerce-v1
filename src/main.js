@@ -1,4 +1,6 @@
-import { animate, inView, press, scroll, stagger } from 'motion';
+import { animate, frame, inView, press, scroll, stagger } from 'motion';
+import Lenis from 'lenis';
+import confetti from 'canvas-confetti';
 
 /* =====================================================================
    IA no Balcão: comportamento da página de vendas.
@@ -8,7 +10,7 @@ import { animate, inView, press, scroll, stagger } from 'motion';
    Cole aqui o link do checkout (Hotmart, Kiwify, Eduzz etc.).
    Enquanto estiver vazio, os botões de compra rolam até a /oferta.
    ===================================================================== */
-const CHECKOUT_URL = '';
+const CHECKOUT_URL = 'https://pay.wiapy.com/bjIt0gdFO49D';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -18,13 +20,58 @@ const EASE_OUT = [0.16, 1, 0.3, 1];
 // Mola curta para respostas a cliques (abas, ícones, botões).
 const SPRING = { type: 'spring', visualDuration: 0.35, bounce: 0.2 };
 
-/* ---------- Checkout ---------- */
-if (CHECKOUT_URL) {
-  document.querySelectorAll('[data-checkout]').forEach((a) => {
+/* ---------- Rolagem suave (Lenis) ----------
+   A roda do mouse desliza em vez de pular, e os links #âncora também.
+   Roda no mesmo quadro do Motion, então o que é preso à rolagem não treme.
+   No celular o toque continua nativo; com movimento reduzido, fica desligado. */
+if (!reduceMotion) {
+  const lenis = new Lenis({ lerp: 0.11, anchors: { offset: -24 } });
+  frame.update(({ timestamp }) => lenis.raf(timestamp), true);
+}
+
+/* ---------- Confete ----------
+   Pura decoração: se falhar (alguns navegadores dentro de apps), nada trava. */
+const BRAND = ['#f2c94c', '#53717a', '#e2683a', '#fbf1d9', '#252d32'];
+function burst(x, y, big = false) {
+  if (reduceMotion) return;
+  try {
+    confetti({
+      particleCount: big ? 90 : 26,
+      spread: big ? 75 : 360,
+      startVelocity: big ? 38 : 18,
+      gravity: big ? 1 : 0.6,
+      ticks: big ? 200 : 90,
+      scalar: big ? 1 : 0.8,
+      origin: { x: x / innerWidth, y: y / innerHeight },
+      colors: BRAND,
+      disableForReducedMotion: true,
+    });
+  } catch { /* decoração: nunca atrapalha */ }
+}
+
+/* ---------- Checkout ----------
+   Quem clica para comprar ganha um estouro de confete saindo do botão.
+   Enquanto o link do checkout estiver vazio, só o botão do ingresso estoura
+   (os outros apenas rolam até a oferta). O link nunca espera o confete. */
+document.querySelectorAll('[data-checkout]').forEach((a) => {
+  if (CHECKOUT_URL) {
     a.href = CHECKOUT_URL;
     a.rel = 'noopener';
+  }
+  a.addEventListener('click', (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const toCheckout = !(a.getAttribute('href') || '').startsWith('#');
+    if (!toCheckout && !a.closest('#oferta')) return;
+    const r = a.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2, true);
   });
-}
+});
+
+/* ---------- Barra de progresso da leitura ---------- */
+(() => {
+  const bar = document.querySelector('[data-progress]');
+  if (bar) scroll((p) => { bar.style.transform = `scaleX(${p})`; });
+})();
 
 /* ---------- Hero: palavra digitada ---------- */
 function startTyping() {
@@ -64,6 +111,101 @@ function startTyping() {
   })();
 }
 
+/* ---------- Hero: "Feito para quem tem" ganha vida ----------
+   Cada negócio leva ao exemplo dele em /na prática (abre a aba certa).
+   Depois da entrada do hero, os ícones pulam um a um e um marcador mostarda
+   passa de negócio em negócio, com um pulinho no ícone ativo. Com o mouse
+   (ou o foco) num item, o marcador vai até ele e espera. O ciclo só roda
+   com o card na tela. */
+const fit = (() => {
+  const list = document.querySelector('[data-fit]');
+  if (!list) return null;
+  const items = [...list.querySelectorAll('.fit-item')];
+  const icons = items.map((a) => a.querySelector('.ico'));
+  const indicator = document.querySelector('[data-fit-indicator]');
+
+  items.forEach((a) => a.addEventListener('click', () => {
+    const tab = document.getElementById(a.dataset.fitTab);
+    if (tab) tab.click();
+  }));
+
+  if (reduceMotion || !indicator) return null;
+  // o card ainda está invisível (entrada do hero): os ícones esperam a vez
+  icons.forEach((ico) => { ico.style.opacity = '0'; });
+
+  const follow = { type: 'spring', visualDuration: 0.45, bounce: 0.22 };
+  let current = -1;
+  let pos = null;
+  let held = false;
+  let visible = true;
+
+  // retângulo do item dentro do .fit-wrap; no 2x2 do celular, um respiro nas bordas
+  function rect(i) {
+    const a = items[i];
+    const inset = innerWidth < 768 ? 5 : 0;
+    return { x: a.offsetLeft + inset, y: a.offsetTop + inset, w: a.offsetWidth - inset * 2, h: a.offsetHeight - inset * 2 };
+  }
+  // posicionamento instantâneo vai direto no style (no Motion 14, uma mola
+  // com duration: 0 trava a página)
+  function place(to) {
+    indicator.style.transform = `translateX(${to.x}px) translateY(${to.y}px)`;
+    indicator.style.width = `${to.w}px`;
+    indicator.style.height = `${to.h}px`;
+  }
+  function go(i) {
+    if (i === current) return;
+    current = i;
+    const to = rect(i);
+    if (!pos) {
+      // surge crescendo: pela Web Animations, com a propriedade scale, para
+      // não sobrescrever o transform que posiciona o marcador
+      place(to);
+      indicator.animate([{ opacity: 0, scale: '0.6' }, { opacity: 1, scale: '1' }], {
+        duration: 420,
+        easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+        fill: 'forwards',
+      });
+    } else {
+      animate(indicator, { x: [pos.x, to.x], y: [pos.y, to.y], width: [pos.w, to.w], height: [pos.h, to.h] }, follow);
+    }
+    pos = to;
+    items.forEach((a, j) => a.classList.toggle('is-on', j === i));
+    animate(icons[i], { y: [0, -5, 0], rotate: [0, -14, 0] }, { duration: 0.5, ease: 'easeOut', delay: 0.12 });
+  }
+
+  items.forEach((a, i) => {
+    a.addEventListener('pointerenter', () => { held = true; go(i); });
+    a.addEventListener('focus', () => { held = true; go(i); });
+    a.addEventListener('blur', () => { held = false; });
+  });
+  list.addEventListener('pointerleave', () => { held = false; });
+  window.addEventListener('resize', () => {
+    if (current < 0) return;
+    pos = rect(current);
+    place(pos);
+  });
+
+  return {
+    async start() {
+      await animate(icons, { opacity: [0, 1], scale: [0.4, 1], rotate: [-20, 0] }, {
+        type: 'spring',
+        visualDuration: 0.5,
+        bounce: 0.5,
+        delay: stagger(0.08),
+      });
+      go(0);
+      inView(list, () => {
+        visible = true;
+        return () => { visible = false; };
+      });
+      setInterval(() => {
+        if (held || !visible || document.hidden) return;
+        go((current + 1) % items.length);
+      }, 2200);
+    },
+  };
+})();
+
 /* ---------- Hero: entrada orquestrada ----------
    O único momento de movimento sem ação do visitante: as peças do hero
    sobem em sequência e só então a palavra começa a ser digitada. */
@@ -83,6 +225,7 @@ function startTyping() {
     });
   }
   startTyping();
+  if (fit) fit.start();
 })();
 
 /* ---------- Hero: o trio ganha vida ----------
@@ -152,26 +295,187 @@ function startTyping() {
   ['pointerup', 'pointercancel', 'pointerleave'].forEach((type) => art.addEventListener(type, release));
 })();
 
-/* ---------- Hero: afunda e esmaece ao rolar ---------- */
+/* ---------- Hero: afunda e esmaece ao rolar ----------
+   O trio desce e encolhe mais devagar que a página (fica "para trás"),
+   em qualquer tela. O resto do hero afunda e esmaece só a partir do tablet. */
 (() => {
   const hero = document.getElementById('topo');
   const inner = document.querySelector('[data-hero-inner]');
-  // só a partir do tablet: no celular o hero é alto e o efeito deixava a
-  // faixa "Feito para quem tem" parecendo apagada logo na primeira rolagem
-  if (!hero || !inner || reduceMotion || !matchMedia('(min-width: 768px)').matches) return;
-  scroll(animate(inner, { y: [0, 120], opacity: [1, 0.1] }, { ease: 'linear' }), {
-    target: hero,
-    offset: ['start start', 'end start'],
-  });
+  const stage = document.querySelector('[data-hero-stage]');
+  if (!hero || reduceMotion) return;
+  const range = { target: hero, offset: ['start start', 'end start'] };
+  if (stage) scroll(animate(stage, { y: [0, 90], scale: [1, 0.88] }, { ease: 'linear' }), range);
+  // no celular o hero é alto e o efeito deixava a faixa "Feito para quem
+  // tem" parecendo apagada logo na primeira rolagem
+  if (inner && matchMedia('(min-width: 768px)').matches) {
+    scroll(animate(inner, { y: [0, 120], opacity: [1, 0.1] }, { ease: 'linear' }), range);
+  }
 })();
 
+/* ---------- Céus: as nuvens ficam para trás ao rolar ----------
+   Quando o fim de cada céu começa a sair da tela, as nuvens descem mais
+   devagar que a página, como se estivessem longe. */
+if (!reduceMotion) {
+  document.querySelectorAll('.sky').forEach((sky) => {
+    const depth = sky.id === 'topo' ? 90 : 60;
+    scroll((p) => sky.style.setProperty('--sky-y', `${(p * depth).toFixed(1)}px`), {
+      target: sky,
+      offset: ['end end', 'end start'],
+    });
+  });
+}
+
 /* ---------- Entrada ao rolar ----------
-   --d no HTML define a ordem dentro de um grupo de cards. */
+   Sobe com mola: passa um pouco do lugar e assenta. --d no HTML define a
+   ordem dentro de um grupo de cards. */
 if (!reduceMotion) {
   inView('.reveal', (el) => {
-    const order = Number(el.style.getPropertyValue('--d')) || 0;
-    animate(el, { opacity: [0, 1], y: [24, 0] }, { duration: 0.9, ease: EASE_OUT, delay: order * 0.08 });
+    const delay = (Number(el.style.getPropertyValue('--d')) || 0) * 0.08;
+    animate(el, { opacity: [0, 1], y: [36, 0] }, {
+      opacity: { duration: 0.5, ease: EASE_OUT, delay },
+      y: { type: 'spring', visualDuration: 0.75, bounce: 0.38, delay },
+    });
   }, { amount: 0.15, margin: '0px 0px -8% 0px' });
+}
+
+/* ---------- Títulos palavra por palavra ----------
+   Cada palavra dos títulos de seção vira um <span> e entra sozinha, girada
+   ao acaso e com mola. O título guarda o texto inteiro no aria-label, para
+   o leitor de tela não soletrar palavra por palavra. Títulos já visíveis
+   quando a página abre ficam como estão. */
+if (!reduceMotion) {
+  document.querySelectorAll('.h2').forEach((h) => {
+    if (h.getBoundingClientRect().top < innerHeight * 0.92) return;
+    h.setAttribute('aria-label', h.textContent.replace(/\s+/g, ' ').trim());
+    const texts = [];
+    const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) texts.push(walker.currentNode);
+    const words = [];
+    texts.forEach((node) => {
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (!part.trim()) {
+          frag.append(' ');
+          return;
+        }
+        const w = document.createElement('span');
+        w.className = 'w';
+        w.setAttribute('aria-hidden', 'true');
+        w.textContent = part;
+        w.style.opacity = '0';
+        frag.append(w);
+        words.push(w);
+      });
+      node.replaceWith(frag);
+    });
+    inView(h, () => {
+      words.forEach((w, i) => {
+        const delay = i * 0.05;
+        const spring = { type: 'spring', visualDuration: 0.6, bounce: 0.45, delay };
+        animate(w, { opacity: [0, 1], y: [36, 0], rotate: [Math.random() * 16 - 8, 0] }, {
+          opacity: { duration: 0.3, delay },
+          y: spring,
+          rotate: spring,
+        });
+      });
+    }, { amount: 0.6 });
+  });
+}
+
+/* ---------- Cards que inclinam com o cursor ----------
+   [data-tilt] gira em X e Y na direção do mouse e volta com mola ao sair.
+   A perspectiva vem do grupo de cards (CSS). Só com mouse. */
+if (!reduceMotion && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  const follow = { type: 'spring', visualDuration: 0.45, bounce: 0.25 };
+  document.querySelectorAll('[data-tilt]').forEach((el) => {
+    let raf = 0;
+    let px = 0;
+    let py = 0;
+    el.addEventListener('pointermove', (e) => {
+      px = e.clientX;
+      py = e.clientY;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const r = el.getBoundingClientRect();
+        const nx = (px - r.left) / r.width - 0.5;
+        const ny = (py - r.top) / r.height - 0.5;
+        animate(el, { rotateY: nx * 9, rotateX: -ny * 9 }, follow);
+      });
+    });
+    el.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      animate(el, { rotateX: 0, rotateY: 0 }, follow);
+    });
+  });
+}
+
+/* ---------- O que tem dentro: etapas na horizontal ----------
+   No desktop a faixa fica presa na tela e a rolagem passa as etapas da
+   direita para a esquerda, com uma barra mostrando quanto falta. No tablet,
+   no celular ou com movimento reduzido, os cards ficam em grade. */
+(() => {
+  const hs = document.querySelector('[data-hscroll]');
+  if (!hs || reduceMotion) return;
+  const sticky = hs.querySelector('.hs-sticky');
+  const track = hs.querySelector('[data-hscroll-track]');
+  const bar = hs.querySelector('[data-hscroll-bar]');
+  const wide = matchMedia('(min-width: 1024px)');
+  let dist = 0;
+  let stop = null;
+  let queued = 0;
+
+  // a altura da faixa = uma tela + o quanto o trilho precisa andar; o
+  // scroll() é refeito a cada medida porque o Motion não percebe a mudança
+  function measure() {
+    queued = 0;
+    if (!hs.classList.contains('is-on')) return;
+    dist = Math.max(0, track.scrollWidth - sticky.clientWidth);
+    hs.style.height = `${sticky.clientHeight + dist}px`;
+    if (stop) stop();
+    stop = scroll((p) => {
+      track.style.transform = `translate3d(${(-p * dist).toFixed(1)}px, 0, 0)`;
+      bar.style.transform = `scaleX(${p})`;
+    }, { target: hs, offset: ['start start', 'end end'] });
+  }
+  const remeasure = () => { if (!queued) queued = requestAnimationFrame(measure); };
+
+  function apply() {
+    if (wide.matches) {
+      hs.classList.add('is-on');
+      measure();
+      return;
+    }
+    if (stop) stop();
+    stop = null;
+    hs.classList.remove('is-on');
+    hs.style.height = '';
+    track.style.transform = '';
+  }
+  wide.addEventListener('change', apply);
+  window.addEventListener('resize', remeasure);
+  new ResizeObserver(remeasure).observe(track);
+  apply();
+})();
+
+/* ---------- Ícones das etapas entram com mola ----------
+   Cada ícone aparece girando quando a sua etapa chega na tela (no desktop,
+   quando o trilho a traz da direita). */
+if (!reduceMotion) {
+  document.querySelectorAll('#conteudo .step-art .ico').forEach((ico) => {
+    ico.style.opacity = '0';
+    inView(ico, () => {
+      const delay = 0.2;
+      const spring = { type: 'spring', visualDuration: 0.55, bounce: 0.5, delay };
+      animate(ico, { opacity: [0, 1], scale: [0.5, 1], rotate: [-16, 0] }, {
+        opacity: { duration: 0.2, delay },
+        scale: spring,
+        rotate: spring,
+      });
+    }, { amount: 0.8 });
+  });
 }
 
 /* ---------- Números contando ---------- */
@@ -220,13 +524,32 @@ if (!reduceMotion) {
     pos = to;
   }
 
-  // Toca o vídeo do painel: barra de progresso, zoom lento no retrato,
-  // legendas uma a uma e o adesivo do produto. Repete enquanto a aba
-  // estiver aberta e a seção estiver na tela.
+  // a cópia da fala que é digitada por cima do texto completo
+  panels.forEach((panel) => {
+    const typed = document.createElement('span');
+    typed.className = 'speech-typed';
+    typed.setAttribute('aria-hidden', 'true');
+    panel.querySelector('[data-speech]').append(typed);
+  });
+
+  // Conta a história do painel: a ficha se preenche campo a campo, a fala é
+  // digitada, o botão "Gerar vídeo" afunda sozinho, a seta se desenha e o
+  // vídeo é "gerado". Depois o vídeo toca (barra de progresso, zoom lento,
+  // legendas uma a uma e o adesivo do produto) e repete enquanto a aba
+  // estiver aberta e a seção estiver na tela. Pelo botão, pula a escrita.
   const REEL_SECONDS = 9;
-  async function play(panel) {
+  let reelAnims = [];
+  async function play(panel, fromButton = false) {
     const my = ++token;
     if (reduceMotion) return;
+    const live = () => my === token;
+    const rows = [...panel.querySelectorAll('.slip-row')];
+    const speech = panel.querySelector('[data-speech]');
+    const typed = speech.querySelector('.speech-typed');
+    const line = speech.querySelector('.speech-full').textContent;
+    const gen = panel.querySelector('[data-generate]');
+    const [arrow, tip] = panel.querySelectorAll('.flow-arrow path');
+    const render = panel.querySelector('.reel-render');
     const reel = panel.querySelector('[data-reel]');
     const bar = reel.querySelector('.reel-bar i');
     const img = reel.querySelector('img');
@@ -234,11 +557,61 @@ if (!reduceMotion) {
     const caps = [...reel.querySelectorAll('.cap')];
     const step = (REEL_SECONDS * 1000) / caps.length;
 
-    while (my === token) {
+    // tudo volta ao ponto de partida antes do primeiro quadro
+    reelAnims.forEach((a) => a.stop());
+    reelAnims = [];
+    caps.forEach((c) => { c.style.opacity = '0'; });
+    sticker.style.opacity = '0';
+    bar.style.transform = 'scaleX(0)';
+    arrow.getAnimations().forEach((a) => a.cancel());
+    arrow.style.strokeDashoffset = '1';
+    tip.style.opacity = '0';
+    render.style.opacity = '0';
+    speech.classList.remove('is-typing');
+
+    if (!fromButton) {
+      rows.forEach((r) => { r.style.opacity = '0'; });
+      animate(rows, { opacity: [0, 1], x: [-10, 0] }, { duration: 0.5, ease: EASE_OUT, delay: stagger(0.11, { startDelay: 0.15 }) });
+      typed.textContent = '';
+      speech.classList.add('is-typing');
+      await wait(rows.length * 110 + 350);
+      for (const ch of line) {
+        if (!live()) return;
+        typed.textContent += ch;
+        await wait(24 + Math.random() * 34);
+      }
+      speech.classList.remove('is-typing');
+      await wait(380);
+      if (!live()) return;
+      // o botão afunda até a sombra e volta, como se alguém clicasse
+      gen.classList.add('is-pressed');
+      animate(gen, { y: 3 }, { type: 'spring', visualDuration: 0.1, bounce: 0 });
+      await wait(170);
+      gen.classList.remove('is-pressed');
+      animate(gen, { y: 0 }, { type: 'spring', visualDuration: 0.35, bounce: 0.5 });
+      if (!live()) return;
+    }
+
+    // a seta vai pela Web Animations nativa: no Motion 14, animar
+    // strokeDashoffset num path de SVG trava a página
+    arrow.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], {
+      duration: 600,
+      easing: `cubic-bezier(${EASE_OUT.join(',')})`,
+      fill: 'forwards',
+    });
+    animate(tip, { opacity: [0, 1] }, { duration: 0.2, delay: 0.5 });
+    animate(render, { opacity: [0, 1] }, { duration: 0.2 });
+    await wait(1300);
+    if (!live()) return;
+    animate(render, { opacity: 0 }, { duration: 0.35 });
+
+    while (live()) {
       caps.forEach((c) => { c.style.opacity = '0'; });
       sticker.style.opacity = '0';
-      animate(bar, { scaleX: [0, 1] }, { duration: REEL_SECONDS, ease: 'linear' });
-      animate(img, { scale: [1.02, 1.1] }, { duration: REEL_SECONDS, ease: 'linear' });
+      reelAnims = [
+        animate(bar, { scaleX: [0, 1] }, { duration: REEL_SECONDS, ease: 'linear' }),
+        animate(img, { scale: [1.02, 1.1] }, { duration: REEL_SECONDS, ease: 'linear' }),
+      ];
 
       for (let i = 0; i < caps.length; i++) {
         // a legenda anterior sai antes de a próxima entrar, para não sobrepor
@@ -277,6 +650,8 @@ if (!reduceMotion) {
   }
 
   tabs.forEach((t, i) => t.addEventListener('click', () => select(i, false)));
+  // "Gerar vídeo" gera de novo o vídeo do painel aberto
+  panels.forEach((p) => p.querySelector('[data-generate]').addEventListener('click', () => play(p, true)));
   tablist.addEventListener('keydown', (e) => {
     const last = tabs.length - 1;
     const map = { ArrowRight: current === last ? 0 : current + 1, ArrowLeft: current === 0 ? last : current - 1, Home: 0, End: last };
