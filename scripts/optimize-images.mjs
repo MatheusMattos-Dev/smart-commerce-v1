@@ -108,6 +108,26 @@ for (const name of ['CS002', 'CS003', 'CS005', 'CS009']) {
   );
 }
 
+// Elenco de /o que você vai criar (fundo amarelo): um personagem diferente em
+// cada card, para mostrar variedade de negócios. 4:5 nos cards de retrato e
+// de foto; 9:16 no card de vídeo.
+const elenco = {
+  'Beleza retrô com cabelo escultural-2.png': ['beleza', 'portrait'],
+  'Chef artesanal de cachos e bigode-1.png': ['chef', 'reel'],
+  'Musa retrô da tecnologia-6.png': ['musa', 'portrait'],
+};
+for (const [file, [slug, format]] of Object.entries(elenco)) {
+  const [width, height, suffix, position] =
+    format === 'reel' ? [360, 640, 'reel', 'centre'] : [640, 800, '640', 'top'];
+  jobs.push(
+    sharp(`img/${file}`)
+      .resize({ width, height, fit: 'cover', position })
+      .webp({ quality: 80, effort: 6 })
+      .toFile(`${OUT}/${slug}-${suffix}.webp`)
+      .then((info) => [`${slug}-${suffix}.webp`, info]),
+  );
+}
+
 // Prévia de compartilhamento (WhatsApp, redes): 1200x630 com o logo corrigido
 // à esquerda e as telas do hero à direita, sobre o céu esverdeado da página.
 const ogBg = Buffer.from(

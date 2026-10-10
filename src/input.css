@@ -1541,6 +1541,46 @@
     font-weight: 900;
   }
 
+  /* celular: retratos em quadrado (cabelo e rosto inteiros), o vídeo vira uma
+     tela vertical 9:16 no meio do card e os selos saem de cima do rosto */
+  @media (max-width: 639px) {
+    .bento-portrait {
+      flex: none;
+      min-height: 0;
+      aspect-ratio: 1;
+    }
+    .bento-portrait > img { object-position: 50% 15%; }
+    .bento-chip.is-b { top: 1rem; right: 1rem; }
+    .bento-chip.is-c { bottom: 1rem; left: 1rem; }
+
+    .bento-reel {
+      width: 11.5rem;
+      height: auto;
+      aspect-ratio: 9 / 16;
+      margin: 1.5rem auto 0;
+      border: 2px solid var(--color-ink);
+      border-radius: 16px;
+      box-shadow: 0 4px 0 var(--color-ink);
+    }
+    .bento-reel > img { object-position: 50% 50%; }
+    .bento-play {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+    .bento-cap {
+      inset-inline: 0.5rem;
+      bottom: 0.75rem;
+      font-size: 0.8125rem;
+    }
+    .bento-video .bento-copy { padding-top: 1rem; }
+
+    .bento-post {
+      height: auto;
+      aspect-ratio: 1;
+    }
+    .bento-post > img { object-position: 50% 20%; }
+  }
+
   /* roteiro: três linhas, com o marcador mostarda passando por elas */
   .bento-lines {
     display: grid;
